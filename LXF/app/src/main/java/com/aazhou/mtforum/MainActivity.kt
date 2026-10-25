@@ -12,11 +12,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,9 +41,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LxApp() {
-    // 状态：当前正在查看的 tid，如果为 null 则显示列表
     var currentTid by remember { mutableStateOf<String?>(null) }
-
     if (currentTid == null) {
         LxForumScreen(onThreadClick = { tid -> currentTid = tid })
     } else {
@@ -52,28 +52,59 @@ fun LxApp() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LxForumScreen(onThreadClick: (String) -> Unit) {
+    val context = LocalContext.current
     var threadList by remember { mutableStateOf<List<LxThread>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
+    var isDownloading by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
+    // 首次加载逻辑
     LaunchedEffect(Unit) {
         isLoading = true
-        try {
-            threadList = LxRepository.getCachedOrFetchThreads("68")
-        } catch (e: Exception) {} finally { isLoading = false }
+        // 先尝试读本地缓存
+        val cached = LxRepository.getCachedThreads(context, "68")
+        if (cached.isNotEmpty()) {
+            threadList = cached
+            isLoading = false
+        } else {
+            // 如果没缓存，直接并发全量下载
+            isDownloading = true
+            threadList = LxRepository.batchDownloadAndCache(context, "68")
+            isDownloading = false
+            isLoading = false
+        }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("理想论坛 · 软件数据教程", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp) },
+                title = { Text("理想论坛 · 本地全量版", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp) },
+                actions = {
+                    if (isDownloading) {
+                        CircularProgressIndicator(modifier = Modifier.size(24.dp).padding(end = 16.dp), color = Color.White, strokeWidth = 2.dp)
+                    } else {
+                        IconButton(onClick = {
+                            scope.launch {
+                                isDownloading = true
+                                threadList = LxRepository.batchDownloadAndCache(context, "68")
+                                isDownloading = false
+                            }
+                        }) {
+                            Icon(Icons.Default.Refresh, contentDescription = "全量同步", tint = Color.White)
+                        }
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFE53935))
             )
         }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
             if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = Color.Red)
+                Column(modifier = Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator(color = Color.Red)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("正在并发下载前3页数据...", fontSize = 14.sp, color = Color.Gray)
+                }
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -92,9 +123,7 @@ fun LxForumScreen(onThreadClick: (String) -> Unit) {
 @Composable
 fun ThreadCard(thread: LxThread, onClick: () -> Unit) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }, // 绑定点击事件
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         shape = RoundedCornerShape(8.dp)
