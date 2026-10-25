@@ -3,9 +3,11 @@ package com.aazhou.mtforum
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -39,14 +41,13 @@ fun LxForumScreen() {
     var errorMsg by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
 
-    // 发起网络请求
     LaunchedEffect(Unit) {
         isLoading = true
-        errorMsg = null
         try {
-            threadList = LxRepository.fetchForumThreads("48", 1)
+            // fid=68 是软件数据教程版块
+            threadList = LxRepository.getCachedOrFetchThreads("68")
         } catch (e: Exception) {
-            errorMsg = e.message ?: "网络请求异常"
+            errorMsg = e.message
         } finally {
             isLoading = false
         }
@@ -55,7 +56,7 @@ fun LxForumScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("理想论坛 · 指标公式", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("理想论坛 · 软件数据教程", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFE53935))
             )
         }
@@ -64,19 +65,15 @@ fun LxForumScreen() {
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = Color.Red)
             } else if (errorMsg != null) {
-                Text(
-                    text = "加载失败：$errorMsg",
-                    color = Color.Red,
-                    modifier = Modifier.align(Alignment.Center).padding(16.dp)
-                )
+                Text(text = "加载失败：$errorMsg", color = Color.Red, modifier = Modifier.align(Alignment.Center))
             } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    contentPadding = PaddingValues(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items(threadList) { thread ->
-                        ThreadCardItem(thread)
+                        ThreadCard(thread)
                     }
                 }
             }
@@ -85,39 +82,52 @@ fun LxForumScreen() {
 }
 
 @Composable
-fun ThreadCardItem(thread: LxThread) {
+fun ThreadCard(thread: LxThread) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        shape = MaterialTheme.shapes.medium
+        shape = RoundedCornerShape(8.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            // 标题
-            Text(
-                text = thread.title,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF222222),
-                lineHeight = 22.sp
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            // 底部信息
+        Column(modifier = Modifier.padding(12.dp)) {
+            // 标题和标签
+            Row(verticalAlignment = Alignment.Top) {
+                if (thread.tag.isNotBlank()) {
+                    Text(
+                        text = "[${thread.tag}] ",
+                        color = Color(0xFF1976D2),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Text(
+                    text = thread.title,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF222222),
+                    lineHeight = 20.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(10.dp))
+            
+            // 底部数据行
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "作者: ${thread.author}",
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
-                Text(
-                    text = "TID: ${thread.tid}",
-                    fontSize = 12.sp,
-                    color = Color.LightGray
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = thread.author, fontSize = 12.sp, color = Color(0xFF666666))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = thread.time, fontSize = 12.sp, color = Color(0xFF999999))
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "查看: ${thread.viewCount}", fontSize = 12.sp, color = Color(0xFF999999))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "回复: ${thread.replyCount}", fontSize = 12.sp, color = Color(0xFF999999))
+                }
             }
         }
     }

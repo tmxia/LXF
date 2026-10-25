@@ -9,7 +9,7 @@ object LxParser {
         val threads = mutableListOf<LxThread>()
         val uniqueTids = mutableSetOf<String>()
 
-        // 找到所有包含 thread- 的 a 标签
+        // 截图显示帖子被包裹在 table 或 li 中
         val elements = doc.select("a[href^=thread-]")
         for (el in elements) {
             val href = el.attr("href")
@@ -19,24 +19,31 @@ object LxParser {
                 try {
                     val tid = href.substringAfter("thread-").substringBefore("-")
                     if (uniqueTids.add(tid)) {
-                        // 核心修复：向上寻找包含作者信息的容器
-                        // Discuz 的帖子列表通常有 tbody[id^=normalthread] 或类似的包裹结构
-                        var author = "未知"
-                        
-                        // 尝试在当前链接的父级、祖父级中寻找指向用户空间(space-uid)的链接
-                        val container = el.parent()?.parent()
-                        if (container != null) {
-                            val authorEl = container.selectFirst("a[href*='space-uid'], cite a")
-                            if (authorEl != null) {
-                                author = authorEl.text().trim()
-                            }
+                        // 向上找包裹容器（通常是一个 tr 或 div）
+                        var container = el.parent()
+                        for (i in 0 until 3) {
+                            if (container?.tagName() == "tbody" || container?.tagName() == "tr" || container?.hasClass("thread-item") == true) break
+                            container = container?.parent()
                         }
+
+                        val author = container?.selectFirst("a[href*='space-uid']")?.text() ?: "未知"
+                        val tag = el.parent()?.selectFirst("em, span.tag")?.text() ?: ""
+                        
+                        // 获取包含数字的 span 提取时间和统计数据
+                        val spans = container?.select("span")?.map { it.text() } ?: emptyList()
+                        val time = spans.firstOrNull { it.contains("-") || it.contains("小时前") } ?: ""
+                        val views = container?.select("a[href*='mod=viewthread']")?.text()?.filter { it.isDigit() } ?: "0"
+                        val replies = container?.select("a[href*='mod=redirect']")?.text()?.filter { it.isDigit() } ?: "0"
 
                         threads.add(
                             LxThread(
                                 tid = tid,
                                 title = title,
                                 author = author,
+                                time = if (time.isBlank()) "刚刚" else time,
+                                viewCount = if (views.isBlank()) "0" else views,
+                                replyCount = if (replies.isBlank()) "0" else replies,
+                                tag = tag,
                                 url = "https://www.55188.com/$href"
                             )
                         )
