@@ -1,5 +1,8 @@
 package com.aazhou.mtforum
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,162 +26,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.nio.charset.Charset
 
+// ==================== 数据模型 ====================
+data class LxThread(
+    val tid: String,
+    val title: String,
+    val author: String,
+    val time: String,
+    val tag: String,
+    val viewCount: String,
+    val replyCount: String
+)
 
-
-
-
+// ==================== 主入口 ====================
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MTFApp() }
-            }
+        setContent {
+            MTFApp()
         }
     }
 }
 
-@Composable
-fun LxApp() {
-    var currentTid by remember { mutableStateOf<String?>(null) }
-    if (currentTid == null) {
-        LxForumScreen(onThreadClick = { tid -> currentTid = tid })
-    } else {
-        LxDetailScreen(tid = currentTid!!, onBack = { currentTid = null })
-    }
+// ==================== 模拟数据逻辑 ====================
+suspend fun fetchLxfThreads(): List<LxThread> {
+    // TODO: 这里放你原本的网络抓取和 GBK 解析逻辑
+    return listOf(
+        LxThread("1", "如果看均线如何判断个股是否即将突破？", "徒然一身", "22分钟前", "综合交流", "120", "5"),
+        LxThread("2", "如何看分时图买卖点，哪些细节是新手容易忽视的？", "清风师", "2小时前", "股票池", "89", "2")
+    )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LxForumScreen(onThreadClick: (String) -> Unit) {
-    val context = LocalContext.current
-    var threadList by remember { mutableStateOf<List<LxThread>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-    var isDownloading by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-
-    // 首次加载逻辑
-    LaunchedEffect(Unit) {
-        isLoading = true
-        // 先尝试读本地缓存
-        val cached = LxRepository.getCachedThreads(context, "68")
-        if (cached.isNotEmpty()) {
-            threadList = cached
-            isLoading = false
-        } else {
-            // 如果没缓存，直接并发全量下载
-            isDownloading = true
-            threadList = LxRepository.batchDownloadAndCache(context, "68")
-            isDownloading = false
-            isLoading = false
-        }
-    }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("理想论坛 · 本地全量版", color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 18.sp) },
-                actions = {
-                    if (isDownloading) {
-                        CircularProgressIndicator(modifier = Modifier.size(24.dp).padding(end = 16.dp), color = Color.White, strokeWidth = 2.dp)
-                    } else {
-                        IconButton(onClick = {
-                            scope.launch {
-                                isDownloading = true
-                                threadList = LxRepository.batchDownloadAndCache(context, "68")
-                                isDownloading = false
-                            }
-                        }) {
-                            Icon(Icons.Default.Refresh, contentDescription = "全量同步", tint = Color.White)
-                        }
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFE53935))
-            )
-        }
-    ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-            if (isLoading) {
-                Column(modifier = Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
-                    CircularProgressIndicator(color = Color.Red)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("正在并发下载前3页数据...", fontSize = 14.sp, color = Color.Gray)
-                }
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(threadList) { thread ->
-                        ThreadCard(thread, onClick = { onThreadClick(thread.tid) })
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun LxDetailScreen(tid: String, onBack: () -> Unit) {
-    var title by remember { mutableStateOf("加载中...") }
-    var content by remember { mutableStateOf("正在抓取正文内容...") }
-    var isLoading by remember { mutableStateOf(true) }
-    val scrollState = rememberScrollState()
-
-    LaunchedEffect(tid) {
-        isLoading = true
-        try {
-            val result = LxRepository.fetchThreadDetail(tid)
-            title = result.first
-            content = result.second
-        } catch (e: Exception) {
-            title = "加载失败"
-            content = e.message ?: "未知错误"
-        } finally {
-            isLoading = false
-        }
-    }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("帖子详情", color = Color.White, fontWeight = FontWeight.SemiBold) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回", tint = Color.White)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFE53935))
-            )
-        }
-    ) { paddingValues ->
-        if (isLoading) {
-            Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Color.Red)
-            }
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .verticalScroll(scrollState)
-                    .padding(16.dp)
-            ) {
-                Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(text = content, fontSize = 15.sp, color = Color.DarkGray, lineHeight = 24.sp)
-            }
-        }
-    }
-}
-
-
-// ==================== MTF 适配框架 UI ====================
-
-
-
-// ==================== 最终版 MTF UI ====================
+// ==================== MTF UI 框架 ====================
 @Composable
 fun MTFApp() {
     var currentBottomTab by remember { mutableIntStateOf(0) }
@@ -216,6 +95,12 @@ fun LxHomeScreen() {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("最新", "热门", "精华", "回复", "抢沙发")
     var threadList by remember { mutableStateOf<List<LxThread>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        threadList = fetchLxfThreads()
+        isLoading = false
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxWidth().background(Color.White).padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -232,8 +117,12 @@ fun LxHomeScreen() {
             }
         }
         
-        LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            items(threadList) { thread -> MTFThreadCard(thread) }
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+        } else {
+            LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                items(threadList) { thread -> MTFThreadCard(thread) }
+            }
         }
     }
 }
@@ -310,7 +199,6 @@ fun MTFThreadCard(thread: LxThread) {
             Text("点击查看帖子详情与讨论内容...", fontSize = 13.sp, color = Color(0xFF888888), maxLines = 1)
             Spacer(modifier = Modifier.height(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                // 移除不支持的 Visibility 图标，改用文字显示
                 Text("浏览: ${thread.viewCount}", fontSize = 12.sp, color = Color(0xFF999999))
                 Spacer(modifier = Modifier.width(16.dp))
                 Text("回复: ${thread.replyCount}", fontSize = 12.sp, color = Color(0xFF999999))
