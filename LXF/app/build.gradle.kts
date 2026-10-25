@@ -16,7 +16,7 @@ android {
     buildToolsVersion = "36.0.0"
 
     defaultConfig {
-        applicationId = "com.aazhou.lxforum"
+        applicationId = "com.aazhou.mtforum"
         minSdk = 29
         targetSdk = 36
         versionCode = 1
