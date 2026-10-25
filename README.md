@@ -5,3 +5,4 @@ Fix crash
 Native test
 Compose test
 Theme test
+Theme test with shell
