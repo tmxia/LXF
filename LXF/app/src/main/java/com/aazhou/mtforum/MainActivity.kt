@@ -72,7 +72,7 @@ suspend fun fetchLxfThreads(): List<LxThread> = withContext(Dispatchers.IO) {
     try {
         val url = URL("https://www.55188.com/")
         val conn = url.openConnection() as HttpURLConnection
-        conn.requestProperty("User-Agent", "Mozilla/5.0")
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0")
         val html = String(conn.inputStream.readBytes(), Charset.forName("GBK"))
         val doc = Jsoup.parse(html)
         val elements = doc.select("a[href^=thread-]")
