@@ -1886,3 +1886,49 @@ fun parseLxThreadList(html: String): List<Thread> {
     }
     return threadList
 }
+
+
+/**
+ * 解析帖子详情 (55188)
+ */
+fun parseThreadDetail(html: String): ThreadPage {
+    val doc = Jsoup.parse(html)
+    
+    // 1. 获取帖子标题
+    val title = doc.selectFirst("h1, .thread-title, title")?.text() ?: "未知标题"
+    
+    // 2. 提取帖子正文和回帖 (Discuz 标准结构通常包含 postmessage)
+    val posts = mutableListOf<Post>()
+    val postElements = doc.select("div[id^=post_], table[id^=pid]")
+    
+    for (postEl in postElements) {
+        // 提取作者
+        val author = postEl.selectFirst(".authi a, .favatar a")?.text() ?: "匿名"
+        // 提取内容 (通常在 td.t_f 中)
+        val contentHtml = postEl.selectFirst(".t_f, .postmessage")?.html() ?: ""
+        
+        // 简单转换 HTML 为纯文本（也可以用 Html.fromHtml 处理）
+        val contentText = Jsoup.parse(contentHtml).text()
+        
+        posts.add(Post(
+            authorName = author,
+            content = contentText,
+            // 如果 Post 模型有其他必填字段，可以在这里补默认值
+            authorUid = "",
+            avatarUrl = "",
+            timeText = "",
+            floor = ""
+        ))
+    }
+
+    return ThreadPage(
+        tid = "",
+        subject = title,
+        forumName = "",
+        posts = posts,
+        page = 1,
+        totalPages = 1,
+        formhash = "",
+        replyUrl = ""
+    )
+}
