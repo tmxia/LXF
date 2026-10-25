@@ -99,7 +99,6 @@ object LxRepository {
             doc.selectFirst("div[id^=postmessage_]")?.html() ?: "未提取到正文内容"
         }
         
-        // 使用标准的正则字符串
         contentText = Jsoup.parse(contentText).text().replace(Regex("\\s+"), " ").trim()
 
         Pair(title, contentText)
