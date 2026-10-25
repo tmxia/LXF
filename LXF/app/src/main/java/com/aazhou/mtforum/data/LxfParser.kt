@@ -36,18 +36,10 @@ object LxfParser {
                     val tid = tidMatch.groupValues[1]
                     if (!addedTids.contains(tid)) {
                         addedTids.add(tid)
-                        var author = "理想股友"
-                        val parent = el.parent()
-                        if (parent != null) {
-                            val authorEl = parent.select("a[href^=space-uid-]").firstOrNull()
-                            if (authorEl != null) author = authorEl.text().trim()
-                        }
-                        
                         threads.add(
                             Thread(
                                 tid = tid,
-                                subject = titleText,
-                                authorName = author
+                                subject = titleText
                             )
                         )
                     }
@@ -62,7 +54,7 @@ object LxfParser {
 
     suspend fun fetchThreadDetail(tid: String): ThreadPage = withContext(Dispatchers.IO) {
         try {
-            val url = URL("https://www.55188.com/thread-$tid-1-1.html")
+            val url = URL("https://www.55188.com/thread-" + tid + "-1-1.html")
             val conn = url.openConnection() as HttpURLConnection
             conn.setRequestProperty("User-Agent", UA)
             conn.connectTimeout = 10000
@@ -72,28 +64,40 @@ object LxfParser {
             
             val title = doc.select("title").text().replace(" - 理想论坛", "").trim()
             val postContent = doc.select("td.t_f").firstOrNull()?.html() ?: "无法解析内容或需要登录查看"
-            val cleanContent = postContent.replace("<br>", "\n").replace(Regex("<[^>]*>"), "")
+            val cleanContent = postContent.replace("<br>", "\\n").replace(Regex("<[^>]*>"), "")
             
             val fakePost = Post(
-                pid = "post_$tid", 
-                tid = tid, 
-                authorName = "理想股友", 
-                message = cleanContent 
+                pid = "pid_" + tid,
+                authorName = "理想股友",
+                authorUid = "理想股友",
+                avatarUrl = null,
+                level = null,
+                timeText = cleanContent,
+                location = null,
+                contentHtml = cleanContent,
+                isOp = false,
+                isFirstPost = false,
+                floor = null,
+                floorLabel = null,
+                quote = null,
+                editedText = cleanContent,
+                hasHiddenContent = cleanContent,
+                sticky = false
             )
             
             ThreadPage(
-                thread = Thread(tid = tid, subject = title),
-                posts = listOf(fakePost),
-                page = 1, 
-                hasNext = false
+                tid = "",
+                subject = null,
+                forumName = null,
+                posts = listOf(fakePost)
             )
         } catch (e: Exception) {
             e.printStackTrace()
             ThreadPage(
-                thread = Thread(tid = tid, subject = "加载失败"),
-                posts = emptyList(),
-                page = 1, 
-                hasNext = false
+                tid = "",
+                subject = null,
+                forumName = null,
+                posts = emptyList()
             )
         }
     }
