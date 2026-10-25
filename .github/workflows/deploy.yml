@@ -81,7 +81,7 @@ jobs:
           echo "KEYSTORE_PATH=$KS" >> $GITHUB_ENV
 
       - name: 写入 local.properties
-        working-directory: MTF
+        working-directory: LXF
         run: |
           cat > local.properties <<EOF
           sdk.dir=$ANDROID_HOME
@@ -92,12 +92,12 @@ jobs:
           EOF
 
       - name: 构建 Release APK
-        working-directory: MTF
+        working-directory: LXF
         run: ./gradlew assembleRelease --no-daemon --stacktrace
 
       - name: 读取版本号
         id: ver
-        working-directory: MTF
+        working-directory: LXF
         run: |
           VN=$(grep -oE 'versionName\s*=\s*"[^"]+"' app/build.gradle.kts | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
           VC=$(grep -oE 'versionCode\s*=\s*[0-9]+' app/build.gradle.kts | head -1 | grep -oE '[0-9]+')
@@ -109,7 +109,7 @@ jobs:
 
       - name: 重命名 APK
         id: apk
-        working-directory: MTF
+        working-directory: LXF
         run: |
           SRC=$(find app/build/outputs/apk/release -name "*.apk" -not -name "*unsigned*" | head -1)
           [ -z "$SRC" ] && SRC=app/build/outputs/apk/release/app-release-unsigned.apk
@@ -119,7 +119,7 @@ jobs:
           ls -lh "$DST"
 
       - name: 创建 GitHub Release
-        working-directory: MTF
+        working-directory: LXF
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

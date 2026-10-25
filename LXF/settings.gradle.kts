@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MTF"
+rootProject.name = "LXF"
 include(":app")
