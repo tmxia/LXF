@@ -9,7 +9,7 @@ object LxParser {
         val threads = mutableListOf<LxThread>()
         val uniqueTids = mutableSetOf<String>()
 
-        // 截图显示帖子被包裹在 table 或 li 中
+        
         val elements = doc.select("a[href^=thread-]")
         for (el in elements) {
             val href = el.attr("href")
@@ -19,7 +19,7 @@ object LxParser {
                 try {
                     val tid = href.substringAfter("thread-").substringBefore("-")
                     if (uniqueTids.add(tid)) {
-                        // 向上找包裹容器（通常是一个 tr 或 div）
+                        
                         var container = el.parent()
                         for (i in 0 until 3) {
                             if (container?.tagName() == "tbody" || container?.tagName() == "tr" || container?.hasClass("thread-item") == true) break
@@ -29,7 +29,7 @@ object LxParser {
                         val author = container?.selectFirst("a[href*='space-uid']")?.text() ?: "未知"
                         val tag = el.parent()?.selectFirst("em, span.tag")?.text() ?: ""
                         
-                        // 获取包含数字的 span 提取时间和统计数据
+                        
                         val spans = container?.select("span")?.map { it.text() } ?: emptyList()
                         val time = spans.firstOrNull { it.contains("-") || it.contains("小时前") } ?: ""
                         val views = container?.select("a[href*='mod=viewthread']")?.text()?.filter { it.isDigit() } ?: "0"

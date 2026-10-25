@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// ==================== 数据模型 ====================
+
 data class LxThread(
     val tid: String,
     val title: String,
@@ -38,7 +38,7 @@ data class LxThread(
     val replyCount: String
 )
 
-// ==================== 主入口 ====================
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// ==================== 模拟数据逻辑 ====================
+
 suspend fun fetchLxfThreads(): List<LxThread> {
     // TODO: 这里放你原本的网络抓取和 GBK 解析逻辑
     return listOf(
@@ -57,7 +57,7 @@ suspend fun fetchLxfThreads(): List<LxThread> {
     )
 }
 
-// ==================== MTF UI 框架 ====================
+
 @Composable
 fun MTFApp() {
     var currentBottomTab by remember { mutableIntStateOf(0) }
