@@ -23,7 +23,29 @@ object LxRepository {
                 .header("Referer", "https://www.55188.com/")
                 .build()
             chain.proceed(request)
-        }
+    
+    suspend fun fetchThreadDetail(tid: String): Pair<String, String> = withContext(Dispatchers.IO) {
+        val url = "https://www.55188.com/thread-$tid-1-1.html"
+        val request = Request.Builder().url(url).build()
+        val response = client.newCall(request).execute()
+        val htmlBytes = response.body?.bytes() ?: throw Exception("返回为空")
+        val html = String(htmlBytes, charset("UTF-8"))
+        
+        val doc = org.jsoup.Jsoup.parse(html)
+        // 获取标题
+        val title = doc.selectFirst("h1, #thread_subject, .thread-title")?.text() ?: "无标题"
+        
+        // 获取正文，尝试抓取 postmessage 或 t_f 容器
+        val contentEl = doc.selectFirst(".t_f, .postmessage, #postlist")
+        var contentText = contentEl?.html() ?: "暂无内容"
+        
+        // 简单清洗 HTML 标签，只留纯文本方便展示
+        contentText = org.jsoup.Jsoup.parse(contentText).text()
+        
+        Pair(title, contentText)
+    }
+
+    }
         .build()
 
     // 内存缓存，避免重复请求
@@ -42,5 +64,26 @@ object LxRepository {
         val parsed = LxParser.parseThreadList(html)
         cachedThreads = parsed
         parsed
+    }
+
+    suspend fun fetchThreadDetail(tid: String): Pair<String, String> = withContext(Dispatchers.IO) {
+        val url = "https://www.55188.com/thread-$tid-1-1.html"
+        val request = Request.Builder().url(url).build()
+        val response = client.newCall(request).execute()
+        val htmlBytes = response.body?.bytes() ?: throw Exception("返回为空")
+        val html = String(htmlBytes, charset("UTF-8"))
+        
+        val doc = org.jsoup.Jsoup.parse(html)
+        // 获取标题
+        val title = doc.selectFirst("h1, #thread_subject, .thread-title")?.text() ?: "无标题"
+        
+        // 获取正文，尝试抓取 postmessage 或 t_f 容器
+        val contentEl = doc.selectFirst(".t_f, .postmessage, #postlist")
+        var contentText = contentEl?.html() ?: "暂无内容"
+        
+        // 简单清洗 HTML 标签，只留纯文本方便展示
+        contentText = org.jsoup.Jsoup.parse(contentText).text()
+        
+        Pair(title, contentText)
     }
 }
