@@ -61,6 +61,15 @@ android {
         }
     }
 
+    
+    applicationVariants.all {
+        outputs.all {
+            if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
+                outputFileName = "LXF-${name}-${versionName}.apk"
+            }
+        }
+    }
+    
     buildTypes {
         release {
             // 优先用正式签名（仓库外 .secrets/mtf/keystore.properties），缺失时回退 debug 签名
