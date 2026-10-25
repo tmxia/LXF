@@ -21,19 +21,19 @@ data class Forum(
 
 @Serializable
 data class Thread(
-    val tid: String,
-    val subject: String,
-    val authorName: String? = null,
-    val authorUid: String? = null,
-    val avatarUrl: String? = null,
-    val level: String? = null,
-    val timeText: String? = null,
-    val replyCount: String? = null,
-    val viewCount: String? = null,
-    val excerpt: String? = null,
-    val isAnnouncement: Boolean = false,
+    val tid: String, = "",
+    val subject: String, = "",
+    val authorName: String? = "",= null,
+    val authorUid: String? = "",= null,
+    val avatarUrl: String? = "",= null,
+    val level: String? = "",= null,
+    val timeText: String? = "",= null,
+    val replyCount: String? = "",= null,
+    val viewCount: String? = "",= null,
+    val excerpt: String? = "",= null,
+    val isAnnouncement: Boolean = false,= false,
     
-    val forumName: String? = null,
+    val forumName: String? = "",= null,
     
     val imageUrls: List<String> = emptyList(),
     

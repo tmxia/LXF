@@ -39,8 +39,7 @@ object LxfParser {
                         threads.add(
                             Thread(
                                 tid = tid,
-                                subject = titleText,
-                                authorName = "理想股友" // 如果还有报错，直接在 Thread.kt 改默认值即可
+                                subject = titleText
                             )
                         )
                     }

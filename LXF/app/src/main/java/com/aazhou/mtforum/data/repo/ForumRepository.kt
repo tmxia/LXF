@@ -245,6 +245,24 @@ class ForumRepository(
 
 
     suspend fun guideFeed(view: String, page: Int): ForumPage = withContext(Dispatchers.IO) {
+        // 🚨 [LXF 终极拦截] 直接请求 55188 数据并返回，不再请求 MT 论坛
+        try {
+            val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
+            if (lxfThreads.isNotEmpty()) {
+                return@withContext ForumPage(
+                    forumName = "理想论坛",
+                    announcements = emptyList(),
+                    threads = lxfThreads,
+                    page = page,
+                    hasNext = true
+                )
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("LXF", "55188 拦截请求失败", e)
+        }
+
+        // 如果拦截失败（比如无网络），降级使用 MTF 原逻辑
+
         val blocked = currentBlocked()
         if (view == GUIDE_VIEW_PORTAL) {
             
