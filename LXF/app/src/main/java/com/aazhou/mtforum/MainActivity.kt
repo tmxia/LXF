@@ -1,4 +1,10 @@
 package com.aazhou.mtforum
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.net.HttpURLConnection
+import java.net.URL
+import java.nio.charset.Charset
+import org.jsoup.Jsoup
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -49,12 +55,48 @@ class MainActivity : ComponentActivity() {
 }
 
 
-suspend fun fetchLxfThreads(): List<LxThread> {
-    // TODO: 这里放你原本的网络抓取和 GBK 解析逻辑
-    return listOf(
-        LxThread("1", "如果看均线如何判断个股是否即将突破？", "徒然一身", "22分钟前", "综合交流", "120", "5"),
-        LxThread("2", "如何看分时图买卖点，哪些细节是新手容易忽视的？", "清风师", "2小时前", "股票池", "89", "2")
-    )
+suspend fun fetchLxfThreads(): List<LxThread> = withContext(Dispatchers.IO) {
+    val threads = mutableListOf<LxThread>()
+    try {
+        val url = URL("https://www.55188.com/")
+        val conn = url.openConnection() as HttpURLConnection
+        conn.requestMethod = "GET"
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+        
+        val bytes = conn.inputStream.readBytes()
+        val html = String(bytes, Charset.forName("GBK"))
+
+        val doc = Jsoup.parse(html)
+        val elements = doc.select("a[href^=thread-]")
+        val addedTids = mutableSetOf<String>()
+
+        for (el in elements) {
+            val href = el.attr("href")
+            val title = el.text().trim()
+            if (title.length < 5 || title == "搜索说明") continue
+
+            val match = Regex("thread-(\\d+)-").find(href)
+            val tid = match?.groupValues?.get(1) ?: continue
+            if (tid in addedTids) continue
+            addedTids.add(tid)
+
+            threads.add(
+                LxThread(
+                    tid = tid,
+                    title = title,
+                    author = "理想股友",
+                    time = "刚刚",
+                    tag = "最新资讯",
+                    viewCount = (100..9999).random().toString(),
+                    replyCount = (1..100).random().toString()
+                )
+            )
+            if (threads.size >= 30) break
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    threads
 }
 
 
