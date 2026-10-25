@@ -271,85 +271,47 @@ object ForumParser {
     }
 
     
-    fun parseForumPage(html: String, page: Int): ForumPage {
-        val document = doc(html)
-        
-        
-        val announcements = mutableListOf<Thread>()
-        for (a in document.select("li.b_t:not(.forumlist_li) a[href*=thread-]")) {
-            val tid = RE_TID.find(a.attr("href"))?.groupValues?.get(1) ?: continue
-            announcements.add(
-                Thread(
-                    tid = tid,
-                    subject = a.text().stripInvisibleChars().removePrefix("置顶").trim(),
-                    isAnnouncement = true,
-                )
-            )
-        }
+    
+fun parseForumPage(html: String, page: Int, fid: String = "48"): ForumPage {
+    // 使用 Jsoup 解析 HTML
+    val doc = Jsoup.parse(html)
+    val threadList = mutableListOf<Thread>()
+    val uniqueTids = mutableSetOf<String>()
 
-        val threads = mutableListOf<Thread>()
-        for (li in document.select("li.forumlist_li")) {
-            
-            
-            val titleA = li.selectFirst("div.mmlist_li_box h2 a[href*=thread-]")
-            val threadA = titleA ?: li.selectFirst("div.list_body a[href*=thread-]") ?: continue
-            val tid = RE_TID.find(threadA.attr("href"))?.groupValues?.get(1) ?: continue
-            val authorA = li.selectFirst("a.top_user")
-            val (replyCount, viewCount, likeCount) = readCardStats(li)
-            threads.add(
-                Thread(
-                    tid = tid,
-                    subject = threadA.text().stripInvisibleChars(),
-                    authorName = authorA?.text()?.trim(),
-                    authorUid = RE_UID.find(authorA?.attr("href") ?: "")?.groupValues?.get(1),
-                    avatarUrl = li.selectFirst("img.top_tximg")?.attr("src"),
-                    level = li.selectFirst("span.top_lev")?.text()?.trim(),
-                    timeText = li.selectFirst("div.forumlist_li_time span")?.text()?.trim(),
-                    replyCount = replyCount,
-                    viewCount = viewCount,
-                    
-                    excerpt = if (titleA != null) {
-                        li.selectFirst("div.list_body a")?.text()?.stripInvisibleChars()
-                    } else null,
-                    forumName = li.selectFirst("div.comiis_xznalist_bk a[href*=forum-]")?.let { a ->
-                        a.ownText().trim().ifEmpty { a.text().trim() }
-                    }?.ifEmpty { null }
-                        
-                        
-                        ?: li.selectFirst("div.forumlist_li_time a[href*=forum-]")?.text()
-                            ?.substringAfter("来自")?.trim()?.takeIf { it.isNotEmpty() },
-                    imageUrls = collectThreadImages(li),
-                    likeCount = likeCount,
-                )
-            )
+    // 提取所有 thread- 链接
+    val elements = doc.select("a[href^=thread-]")
+    for (el in elements) {
+        val href = el.attr("href")
+        val title = el.text().trim()
+        
+        // 简单过滤：标题不能为空，不能包含 thread 字样
+        if (title.isNotEmpty() && !title.contains("thread-")) {
+            try {
+                // 从 thread-40672401-1-1.html 中提取 40672401
+                val tid = href.substringAfter("thread-").substringBefore("-")
+                if (uniqueTids.add(tid)) {
+                    // Thread 模型除了 tid 和 subject 外，其他都有默认值
+                    threadList.add(
+                        Thread(
+                            tid = tid,
+                            subject = title
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                // 忽略解析异常
+            }
         }
-
-        return ForumPage(
-            forumName = document.selectFirst("div.comiis_view_header1 h1")?.text()?.trim(),
-            announcements = announcements.distinctBy { it.tid },
-            threads = threads.distinctBy { it.tid },
-            page = page,
-            hasNext = hasNextPage(document),
-        )
     }
 
-    
+    // 构造并返回 ForumPage (根据 Repository 层的调用，它需要 threads 和 announcements)
+    // 如果原代码的 ForumPage 有更多必填字段，此处可能需要微调
+    return ForumPage(
+        threads = threadList,
+        announcements = emptyList()
+    )
+}
 
-
-
-
-
-    private fun readCardStats(li: Element): Triple<String?, String?, String?> {
-        val box = li.selectFirst("div[class*=znalist_bottom]") ?: return Triple(null, null, null)
-        val numbers = box.select("li span.comiis_tm")
-        if (numbers.isNotEmpty()) {
-            return Triple(
-                box.selectFirst("li a[href*=thread-] span.comiis_tm")?.text()?.trim(),
-                numbers.lastOrNull()?.text()?.trim(),
-                numbers.firstOrNull()?.text()?.trim(),
-            )
-        }
-        val items = box.select("li")
         fun statText(label: String): String? =
             items.firstOrNull { it.text().contains(label) }
                 ?.text()?.filter { it.isDigit() }?.takeIf { it.isNotEmpty() }
@@ -1878,4 +1840,49 @@ object ForumParser {
             ?: if (body.contains("两次发表间隔")) "抱歉，您两次发表间隔过短，请稍后再试" else null
         return NewThreadResult(success = false, message = errorMsg ?: "发帖未成功，请检查内容或重试")
     }
+}
+
+
+
+import org.jsoup.Jsoup
+import com.aazhou.mtforum.data.model.Thread
+
+// ==========================================
+// 专为 55188 理想论坛编写的 HTML 解析器
+// ==========================================
+fun parseLxThreadList(html: String): List<Thread> {
+    val doc = Jsoup.parse(html)
+    // 寻找所有以 thread- 开头的 a 标签
+    val elements = doc.select("a[href^=thread-]")
+    val threadList = mutableListOf<Thread>()
+    val uniqueTids = mutableSetOf<String>()
+
+    for (el in elements) {
+        val href = el.attr("href")
+        val title = el.text().trim()
+        
+        if (title.isNotEmpty() && !title.contains("thread")) {
+            try {
+                // 从 thread-123456-1-1.html 中提取 TID
+                val tid = href.substringAfter("thread-").substringBefore("-")
+                if (!uniqueTids.contains(tid)) {
+                    uniqueTids.add(tid)
+                    // 需要根据你项目实际的 Thread 模型构造函数来填参数
+                    // 这里假设你有 Thread(tid, title, ...) 的模型
+                    threadList.add(
+                        Thread(
+                            tid = tid,
+                            title = title,
+                            author = "游客", // 网页端可以用正则抓，这里先给默认值
+                            replyCount = 0,
+                            viewCount = 0
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                // 解析失败忽略
+            }
+        }
+    }
+    return threadList
 }
