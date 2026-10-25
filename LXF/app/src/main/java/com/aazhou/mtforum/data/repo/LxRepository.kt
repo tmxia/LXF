@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit
 object LxRepository {
     private const val COOKIE = "HMACCOUNT=F3FD580504BD7E15; Hm_lpvt_0233b908b2bf29bfd788abd7ee3556da=1757035032; 55188_passport=XQbXwQnsMTPVjz0f289tEqA1yBENwwP0LKUwEJPVcP2K%2Fh9czvN0Odaeil2mq0q%2B%2FoDOUdMjXbkJq5%2F72eybrVGWt2J0dE8nBItzlqUoFKju%2BeUADFNhFhZvatV2V0G6N5e0J8uHNn2h7bnLeE6aC92dTCbtOvPl5QsVq8ygxrg%3D; passport2bbs=gXfzvUFx5Yx567ZhgndUtE89%2F81R6s5TCwZUBHERqfjVS%2FHg1lbEh%2FKGNJI7x1dK; cdb2_auth=jiqsgmbJXdBFKY8Asxbfh26nwQIv%2BJpbCF%2F01k%2BELaRiGSsEFr%2BxBzq%2BVeirpKA0; vOVx_56cc_saltkey=NN6A55Gs; vOVx_56cc_lastvisit=1792912771; vOVx_56cc_auth=031dQCd%2FCf1lezfzIt37Cr6SNufUPY99nXC1aHDYwbBy4Wr4vfCb4hcoHMT4fo7MuRbUjY3%2FiXlpSPm19SyBB5YWYls; vOVx_56cc_ulastactivity=9c91VEYN82V2Y9GJ5aM10iJ9Ct3zLWZz3GCnH8jisy0avIRUXTmF; vOVx_56cc_sid=EDh4Q1; vOVx_56cc_lip=49.118.82.123%2C1792916374; vOVx_56cc_atarget=1; vOVx_56cc_visitedfid=68; vOVx_56cc_home_diymode=1; vOVx_56cc_st_t=784998%7C1792925605%7C44054d47715c210d61bec28229d9defb; vOVx_56cc_forum_lastvisit=D_68_1792925605; vOVx_56cc_lastact=1792925653%09forum.php%09image"
 
-    // 关键：伪装成 Windows 电脑端浏览器，抓取完整的 HTML
     private const val PC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
     private val client: OkHttpClient = OkHttpClient.Builder()
@@ -35,25 +34,22 @@ object LxRepository {
         }
         .build()
 
-    // 并发拉取前 3 页数据，并保存到本地文件
     suspend fun batchDownloadAndCache(context: Context, fid: String = "68"): List<LxThread> = withContext(Dispatchers.IO) {
         val allThreads = mutableListOf<LxThread>()
         
         coroutineScope {
             val deferreds = (1..3).map { page ->
-                async {
+                async<List<LxThread>> {
                     try {
                         val url = "https://www.55188.com/forum-$fid-$page.html"
                         val request = Request.Builder().url(url).build()
                         val response: Response = client.newCall(request).execute()
-                        val htmlBytes = response.body?.bytes() ?: return@async
+                        val htmlBytes = response.body?.bytes() ?: return@async emptyList()
                         val html = String(htmlBytes, charset("UTF-8"))
                         
-                        // 将 HTML 保存到本地缓存
                         val file = File(context.cacheDir, "lx_forum_${fid}_$page.html")
                         file.writeText(html)
                         
-                        // 解析并返回这一页的列表
                         LxParser.parseThreadList(html)
                     } catch (e: Exception) {
                         emptyList()
@@ -66,7 +62,6 @@ object LxRepository {
         return@withContext allThreads
     }
 
-    // 从本地缓存读取列表
     suspend fun getCachedThreads(context: Context, fid: String = "68"): List<LxThread> = withContext(Dispatchers.IO) {
         val allThreads = mutableListOf<LxThread>()
         val uniqueTids = mutableSetOf<String>()
@@ -87,7 +82,6 @@ object LxRepository {
     }
 
     suspend fun fetchThreadDetail(tid: String): Pair<String, String> = withContext(Dispatchers.IO) {
-        // 直接请求 PC 端的详情页
         val url = "https://www.55188.com/thread-$tid-1-1.html"
         val request = Request.Builder().url(url).build()
         val response: Response = client.newCall(request).execute()
@@ -97,18 +91,16 @@ object LxRepository {
         val doc = Jsoup.parse(html)
         val title = doc.selectFirst("h1, #thread_subject, .thread-title, .ts")?.text() ?: "无标题"
 
-        // PC端标准的正文容器是 .t_f
         var contentEl = doc.selectFirst("td.t_f, div.t_f, .postmessage")
         
         var contentText = if (contentEl != null) {
             contentEl.html()
         } else {
-            // 实在找不到就抓取包含 postmessage 的元素
             doc.selectFirst("div[id^=postmessage_]")?.html() ?: "未提取到正文内容"
         }
         
-        // 清理 HTML 标签和多余空格
-        contentText = Jsoup.parse(contentText).text().replace("\s+".toRegex(), " ").trim()
+        // 使用标准的正则字符串
+        contentText = Jsoup.parse(contentText).text().replace(Regex("\\s+"), " ").trim()
 
         Pair(title, contentText)
     }
