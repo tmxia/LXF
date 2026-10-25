@@ -1,43 +1,43 @@
-package com.aazhou.lxforum.data.parser
+package com.aazhou.mtforum.data.parser
 
-import com.aazhou.lxforum.data.model.Forum
-import com.aazhou.lxforum.data.model.FriendRequestItem
-import com.aazhou.lxforum.data.model.FriendRequestPage
-import com.aazhou.lxforum.data.model.ForumGroup
-import com.aazhou.lxforum.data.model.ForumPage
-import com.aazhou.lxforum.data.model.AtUser
-import com.aazhou.lxforum.data.model.HomeData
-import com.aazhou.lxforum.data.model.LikeResult
-import com.aazhou.lxforum.data.model.LikeUser
-import com.aazhou.lxforum.data.model.LoginResult
-import com.aazhou.lxforum.data.model.Notice
-import com.aazhou.lxforum.data.model.NoticePage
-import com.aazhou.lxforum.data.model.PmPage
-import com.aazhou.lxforum.data.model.PrivateMessage
-import com.aazhou.lxforum.data.model.ChatMessage
-import com.aazhou.lxforum.data.model.ChatConversation
-import com.aazhou.lxforum.data.model.Post
-import com.aazhou.lxforum.data.model.PostQuote
-import com.aazhou.lxforum.data.model.ReplyResult
-import com.aazhou.lxforum.data.model.CheckInStatus
-import com.aazhou.lxforum.data.model.CheckInResult
-import com.aazhou.lxforum.data.model.SearchResult
-import com.aazhou.lxforum.data.model.Thread
-import com.aazhou.lxforum.data.model.ThreadPage
-import com.aazhou.lxforum.data.model.UserProfile
-import com.aazhou.lxforum.data.model.NewThreadPageData
-import com.aazhou.lxforum.data.model.NewThreadResult
-import com.aazhou.lxforum.data.model.EditPostPageData
-import com.aazhou.lxforum.data.model.EditAttachment
-import com.aazhou.lxforum.data.model.EditPostResult
-import com.aazhou.lxforum.data.model.ThreadType
-import com.aazhou.lxforum.data.model.FavoriteItem
-import com.aazhou.lxforum.data.model.FavoritePage
-import com.aazhou.lxforum.data.model.FollowUserItem
-import com.aazhou.lxforum.data.model.FollowUserPage
-import com.aazhou.lxforum.data.model.FriendUserItem
-import com.aazhou.lxforum.data.model.FriendUserPage
-import com.aazhou.lxforum.data.model.MyThreadPage
+import com.aazhou.mtforum.data.model.Forum
+import com.aazhou.mtforum.data.model.FriendRequestItem
+import com.aazhou.mtforum.data.model.FriendRequestPage
+import com.aazhou.mtforum.data.model.ForumGroup
+import com.aazhou.mtforum.data.model.ForumPage
+import com.aazhou.mtforum.data.model.AtUser
+import com.aazhou.mtforum.data.model.HomeData
+import com.aazhou.mtforum.data.model.LikeResult
+import com.aazhou.mtforum.data.model.LikeUser
+import com.aazhou.mtforum.data.model.LoginResult
+import com.aazhou.mtforum.data.model.Notice
+import com.aazhou.mtforum.data.model.NoticePage
+import com.aazhou.mtforum.data.model.PmPage
+import com.aazhou.mtforum.data.model.PrivateMessage
+import com.aazhou.mtforum.data.model.ChatMessage
+import com.aazhou.mtforum.data.model.ChatConversation
+import com.aazhou.mtforum.data.model.Post
+import com.aazhou.mtforum.data.model.PostQuote
+import com.aazhou.mtforum.data.model.ReplyResult
+import com.aazhou.mtforum.data.model.CheckInStatus
+import com.aazhou.mtforum.data.model.CheckInResult
+import com.aazhou.mtforum.data.model.SearchResult
+import com.aazhou.mtforum.data.model.Thread
+import com.aazhou.mtforum.data.model.ThreadPage
+import com.aazhou.mtforum.data.model.UserProfile
+import com.aazhou.mtforum.data.model.NewThreadPageData
+import com.aazhou.mtforum.data.model.NewThreadResult
+import com.aazhou.mtforum.data.model.EditPostPageData
+import com.aazhou.mtforum.data.model.EditAttachment
+import com.aazhou.mtforum.data.model.EditPostResult
+import com.aazhou.mtforum.data.model.ThreadType
+import com.aazhou.mtforum.data.model.FavoriteItem
+import com.aazhou.mtforum.data.model.FavoritePage
+import com.aazhou.mtforum.data.model.FollowUserItem
+import com.aazhou.mtforum.data.model.FollowUserPage
+import com.aazhou.mtforum.data.model.FriendUserItem
+import com.aazhou.mtforum.data.model.FriendUserPage
+import com.aazhou.mtforum.data.model.MyThreadPage
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -50,7 +50,7 @@ import org.jsoup.nodes.Element
 
 object ForumParser {
 
-    private const val BASE = "https://www.55188.com/"
+    private const val BASE = "https://bbs.binmt.cc/"
     private val RE_TID = Regex("thread-(\\d+)")
     private val RE_FID = Regex("forum-(\\d+)-")
     private val RE_UID = Regex("uid=(\\d+)")
@@ -271,47 +271,85 @@ object ForumParser {
     }
 
     
-    
-fun parseForumPage(html: String, page: Int, fid: String = "48"): ForumPage {
-    // 使用 Jsoup 解析 HTML
-    val doc = Jsoup.parse(html)
-    val threadList = mutableListOf<Thread>()
-    val uniqueTids = mutableSetOf<String>()
-
-    // 提取所有 thread- 链接
-    val elements = doc.select("a[href^=thread-]")
-    for (el in elements) {
-        val href = el.attr("href")
-        val title = el.text().trim()
+    fun parseForumPage(html: String, page: Int): ForumPage {
+        val document = doc(html)
         
-        // 简单过滤：标题不能为空，不能包含 thread 字样
-        if (title.isNotEmpty() && !title.contains("thread-")) {
-            try {
-                // 从 thread-40672401-1-1.html 中提取 40672401
-                val tid = href.substringAfter("thread-").substringBefore("-")
-                if (uniqueTids.add(tid)) {
-                    // Thread 模型除了 tid 和 subject 外，其他都有默认值
-                    threadList.add(
-                        Thread(
-                            tid = tid,
-                            subject = title
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                // 忽略解析异常
-            }
+        
+        val announcements = mutableListOf<Thread>()
+        for (a in document.select("li.b_t:not(.forumlist_li) a[href*=thread-]")) {
+            val tid = RE_TID.find(a.attr("href"))?.groupValues?.get(1) ?: continue
+            announcements.add(
+                Thread(
+                    tid = tid,
+                    subject = a.text().stripInvisibleChars().removePrefix("置顶").trim(),
+                    isAnnouncement = true,
+                )
+            )
         }
+
+        val threads = mutableListOf<Thread>()
+        for (li in document.select("li.forumlist_li")) {
+            
+            
+            val titleA = li.selectFirst("div.mmlist_li_box h2 a[href*=thread-]")
+            val threadA = titleA ?: li.selectFirst("div.list_body a[href*=thread-]") ?: continue
+            val tid = RE_TID.find(threadA.attr("href"))?.groupValues?.get(1) ?: continue
+            val authorA = li.selectFirst("a.top_user")
+            val (replyCount, viewCount, likeCount) = readCardStats(li)
+            threads.add(
+                Thread(
+                    tid = tid,
+                    subject = threadA.text().stripInvisibleChars(),
+                    authorName = authorA?.text()?.trim(),
+                    authorUid = RE_UID.find(authorA?.attr("href") ?: "")?.groupValues?.get(1),
+                    avatarUrl = li.selectFirst("img.top_tximg")?.attr("src"),
+                    level = li.selectFirst("span.top_lev")?.text()?.trim(),
+                    timeText = li.selectFirst("div.forumlist_li_time span")?.text()?.trim(),
+                    replyCount = replyCount,
+                    viewCount = viewCount,
+                    
+                    excerpt = if (titleA != null) {
+                        li.selectFirst("div.list_body a")?.text()?.stripInvisibleChars()
+                    } else null,
+                    forumName = li.selectFirst("div.comiis_xznalist_bk a[href*=forum-]")?.let { a ->
+                        a.ownText().trim().ifEmpty { a.text().trim() }
+                    }?.ifEmpty { null }
+                        
+                        
+                        ?: li.selectFirst("div.forumlist_li_time a[href*=forum-]")?.text()
+                            ?.substringAfter("来自")?.trim()?.takeIf { it.isNotEmpty() },
+                    imageUrls = collectThreadImages(li),
+                    likeCount = likeCount,
+                )
+            )
+        }
+
+        return ForumPage(
+            forumName = document.selectFirst("div.comiis_view_header1 h1")?.text()?.trim(),
+            announcements = announcements.distinctBy { it.tid },
+            threads = threads.distinctBy { it.tid },
+            page = page,
+            hasNext = hasNextPage(document),
+        )
     }
 
-    // 构造并返回 ForumPage (根据 Repository 层的调用，它需要 threads 和 announcements)
-    // 如果原代码的 ForumPage 有更多必填字段，此处可能需要微调
-    return ForumPage(
-        threads = threadList,
-        announcements = emptyList()
-    )
-}
+    
 
+
+
+
+
+    private fun readCardStats(li: Element): Triple<String?, String?, String?> {
+        val box = li.selectFirst("div[class*=znalist_bottom]") ?: return Triple(null, null, null)
+        val numbers = box.select("li span.comiis_tm")
+        if (numbers.isNotEmpty()) {
+            return Triple(
+                box.selectFirst("li a[href*=thread-] span.comiis_tm")?.text()?.trim(),
+                numbers.lastOrNull()?.text()?.trim(),
+                numbers.firstOrNull()?.text()?.trim(),
+            )
+        }
+        val items = box.select("li")
         fun statText(label: String): String? =
             items.firstOrNull { it.text().contains(label) }
                 ?.text()?.filter { it.isDigit() }?.takeIf { it.isNotEmpty() }
@@ -1840,95 +1878,4 @@ fun parseForumPage(html: String, page: Int, fid: String = "48"): ForumPage {
             ?: if (body.contains("两次发表间隔")) "抱歉，您两次发表间隔过短，请稍后再试" else null
         return NewThreadResult(success = false, message = errorMsg ?: "发帖未成功，请检查内容或重试")
     }
-}
-
-
-
-import org.jsoup.Jsoup
-import com.aazhou.lxforum.data.model.Thread
-
-// ==========================================
-// 专为 55188 理想论坛编写的 HTML 解析器
-// ==========================================
-fun parseLxThreadList(html: String): List<Thread> {
-    val doc = Jsoup.parse(html)
-    // 寻找所有以 thread- 开头的 a 标签
-    val elements = doc.select("a[href^=thread-]")
-    val threadList = mutableListOf<Thread>()
-    val uniqueTids = mutableSetOf<String>()
-
-    for (el in elements) {
-        val href = el.attr("href")
-        val title = el.text().trim()
-        
-        if (title.isNotEmpty() && !title.contains("thread")) {
-            try {
-                // 从 thread-123456-1-1.html 中提取 TID
-                val tid = href.substringAfter("thread-").substringBefore("-")
-                if (!uniqueTids.contains(tid)) {
-                    uniqueTids.add(tid)
-                    // 需要根据你项目实际的 Thread 模型构造函数来填参数
-                    // 这里假设你有 Thread(tid, title, ...) 的模型
-                    threadList.add(
-                        Thread(
-                            tid = tid,
-                            title = title,
-                            author = "游客", // 网页端可以用正则抓，这里先给默认值
-                            replyCount = 0,
-                            viewCount = 0
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                // 解析失败忽略
-            }
-        }
-    }
-    return threadList
-}
-
-
-/**
- * 解析帖子详情 (55188)
- */
-fun parseThreadDetail(html: String): ThreadPage {
-    val doc = Jsoup.parse(html)
-    
-    // 1. 获取帖子标题
-    val title = doc.selectFirst("h1, .thread-title, title")?.text() ?: "未知标题"
-    
-    // 2. 提取帖子正文和回帖 (Discuz 标准结构通常包含 postmessage)
-    val posts = mutableListOf<Post>()
-    val postElements = doc.select("div[id^=post_], table[id^=pid]")
-    
-    for (postEl in postElements) {
-        // 提取作者
-        val author = postEl.selectFirst(".authi a, .favatar a")?.text() ?: "匿名"
-        // 提取内容 (通常在 td.t_f 中)
-        val contentHtml = postEl.selectFirst(".t_f, .postmessage")?.html() ?: ""
-        
-        // 简单转换 HTML 为纯文本（也可以用 Html.fromHtml 处理）
-        val contentText = Jsoup.parse(contentHtml).text()
-        
-        posts.add(Post(
-            authorName = author,
-            content = contentText,
-            // 如果 Post 模型有其他必填字段，可以在这里补默认值
-            authorUid = "",
-            avatarUrl = "",
-            timeText = "",
-            floor = ""
-        ))
-    }
-
-    return ThreadPage(
-        tid = "",
-        subject = title,
-        forumName = "",
-        posts = posts,
-        page = 1,
-        totalPages = 1,
-        formhash = "",
-        replyUrl = ""
-    )
 }

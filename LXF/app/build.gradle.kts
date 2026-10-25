@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "com.aazhou.lxforum"
+    namespace = "com.aazhou.mtforum"
     compileSdk = 36
     buildToolsVersion = "36.0.0"
 
