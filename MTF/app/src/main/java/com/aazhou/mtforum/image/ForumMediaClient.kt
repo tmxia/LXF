@@ -29,19 +29,19 @@ fun forumMediaClient(
             
             
             val referer = when {
-                request.url.toString().contains("forum.php") -> "https://bbs.binmt.cc/forum.php"
-                request.url.toString().contains("thread-") -> "https://bbs.binmt.cc/thread-${extractTid(request)}-1-1.html"
-                else -> "https://bbs.binmt.cc/"
+                request.url.toString().contains("forum.php") -> "https://www.55188.com/forum.php"
+                request.url.toString().contains("thread-") -> "https://www.55188.com/thread-${extractTid(request)}-1-1.html"
+                else -> "https://www.55188.com/"
             }
 
             val builder: Request.Builder = request.newBuilder()
                 .header("User-Agent", userAgent)
                 .header("Accept", "image/avif,image/webp,image/apng,image/*,*/*;q=0.8")
                 .header("Accept-Language", "zh-CN,zh;q=0.9")
-                .header("Origin", "https://bbs.binmt.cc")
+                .header("Origin", "https://www.55188.com")
 
-            if (host.endsWith("binmt.cc")) {
-                builder.header("Referer", "https://bbs.binmt.cc/forum.php")
+            if (host.endsWith("55188.com")) {
+                builder.header("Referer", "https://www.55188.com/forum.php")
                 val cookie = cookieHeader()
                 if (cookie.isNotEmpty()) builder.header("Cookie", cookie)
             }

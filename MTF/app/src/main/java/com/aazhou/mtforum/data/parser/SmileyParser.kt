@@ -32,7 +32,7 @@ data class Smiley(
 object SmileyParser {
 
     
-    private const val SMILEY_BASE = "https://cdn.binmt.cc/static/image/smiley/"
+    private const val SMILEY_BASE = "https://cdn.55188.com/static/image/smiley/"
 
     private val RE_TYPE = Regex("""smilies_type\['_(\d+)'\]\s*=\s*\['([^']*)',\s*'([^']*)'\]""")
     private val RE_CHUNK = Regex("""smilies_array\[(\d+)\]\[\d+\]\s*=\s*\[""")

@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 private fun imagesDir(): String = "${Environment.DIRECTORY_PICTURES}/MTF"
 private fun videosDir(): String = "${Environment.DIRECTORY_MOVIES}/MTF"
 internal fun downloadBytes(context: Context, url: String): ByteArray =
-    context.container().httpClient.getBytes(url, referer = "https://bbs.binmt.cc/")
+    context.container().httpClient.getBytes(url, referer = "https://www.55188.com/")
 
 internal fun mimeOf(url: String): String = when {
     url.contains(".png", true) -> "image/png"

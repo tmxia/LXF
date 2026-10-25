@@ -11,12 +11,12 @@ plugins {
 }
 
 android {
-    namespace = "com.aazhou.mtforum"
+    namespace = "com.aazhou.lxforum"
     compileSdk = 36
     buildToolsVersion = "36.0.0"
 
     defaultConfig {
-        applicationId = "com.aazhou.mtforum"
+        applicationId = "com.aazhou.lxforum"
         minSdk = 29
         targetSdk = 36
         versionCode = 1

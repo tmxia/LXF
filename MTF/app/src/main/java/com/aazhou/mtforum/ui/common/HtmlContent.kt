@@ -826,8 +826,8 @@ internal fun normalizeMediaUrl(raw: String): String {
     val absolute = when {
         raw.startsWith("http") -> raw
         raw.startsWith("//") -> "https:$raw"
-        raw.startsWith("/") -> "https://bbs.binmt.cc$raw"
-        else -> "https://bbs.binmt.cc/$raw"
+        raw.startsWith("/") -> "https://www.55188.com$raw"
+        else -> "https://www.55188.com/$raw"
     }
     return upgradeToHttps(absolute)
 }

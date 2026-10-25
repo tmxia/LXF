@@ -35,8 +35,8 @@ internal fun buildThreadHtml(page: ThreadPage, localSrc: (String) -> String?): S
         append("<h2 class=\"replies-title\">全部评论（").append(replies.size).append("）</h2>")
         replies.forEach { append(postHtml(it, isOpPost = false, localSrc)) }
         append("<footer class=\"source\">原文：<a href=\"")
-            .append(escapeHtml("https://bbs.binmt.cc/thread-${page.tid}-1-1.html"))
-            .append("\">https://bbs.binmt.cc/thread-").append(escapeHtml(page.tid))
+            .append(escapeHtml("https://www.55188.com/thread-${page.tid}-1-1.html"))
+            .append("\">https://www.55188.com/thread-").append(escapeHtml(page.tid))
             .append("-1-1.html</a></footer>")
     }
     return """

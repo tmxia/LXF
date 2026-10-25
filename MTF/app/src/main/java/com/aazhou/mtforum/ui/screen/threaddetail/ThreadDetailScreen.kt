@@ -1293,7 +1293,7 @@ private fun Modifier.userClick(
 private fun shareThread(context: Context, subject: String?, tid: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
-        putExtra(Intent.EXTRA_TEXT, "$subject https://bbs.binmt.cc/thread-$tid-1-1.html")
+        putExtra(Intent.EXTRA_TEXT, "$subject https://www.55188.com/thread-$tid-1-1.html")
     }
     context.startActivity(Intent.createChooser(intent, "分享"))
 }

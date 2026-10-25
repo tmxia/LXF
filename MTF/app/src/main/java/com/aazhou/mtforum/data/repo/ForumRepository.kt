@@ -128,7 +128,7 @@ private const val GUIDE_VIEW_PORTAL = "hot"
 
 
 
-private const val ATTACHMENT_CDN = "https://cdn.binmt.cc/"
+private const val ATTACHMENT_CDN = "https://cdn.55188.com/"
 
 class ForumRepository(
     private val http: HttpClient,
@@ -343,7 +343,7 @@ class ForumRepository(
         
         
         for (aid in attachAids(message)) params["attachnew[$aid][description]"] = ""
-        val body = http.post(url, params, referer = "https://bbs.binmt.cc/thread-$tid-1-1.html")
+        val body = http.post(url, params, referer = "https://www.55188.com/thread-$tid-1-1.html")
         val result = ForumParser.parseReplyResult(body)
         
         
@@ -658,11 +658,11 @@ class ForumRepository(
         )
         try {
             val params = HashMap<String, String>()
-            params["referer"] = "https://bbs.binmt.cc/home.php?mod=space&do=favorite&type=forum&mobile=2"
+            params["referer"] = "https://www.55188.com/home.php?mod=space&do=favorite&type=forum&mobile=2"
             params["deletesubmit"] = "true"
             params["formhash"] = formhash
             params["handlekey"] = "favorite_del"
-            val resp = http.post(url, params, referer = "https://bbs.binmt.cc/forum.php?mobile=2")
+            val resp = http.post(url, params, referer = "https://www.55188.com/forum.php?mobile=2")
             android.util.Log.d("FollowForum", "unfollow resp=${resp.take(300)}")
             
             val isFail = resp.contains("来路不正确") || resp.contains("表单验证串")
@@ -873,7 +873,7 @@ class ForumRepository(
         val body = http.post(
             url,
             params,
-            referer = "https://bbs.binmt.cc/forum.php?mod=post&action=edit&tid=$tid&pid=$pid&mobile=2",
+            referer = "https://www.55188.com/forum.php?mod=post&action=edit&tid=$tid&pid=$pid&mobile=2",
         )
         ForumParser.parseEditPostResult(body, tid)
     }
@@ -925,7 +925,7 @@ class ForumRepository(
         val url = http.url(
             "forum.php?mod=topicadmin&action=stickreply&modsubmit=yes&modclick=yes&mobile=2&inajax=1",
         )
-        val body = http.post(url, params, referer = "https://bbs.binmt.cc/thread-$tid-1-1.html")
+        val body = http.post(url, params, referer = "https://www.55188.com/thread-$tid-1-1.html")
         TOPICADMIN_SUCCESS.containsMatchIn(body)
     }
 
@@ -957,7 +957,7 @@ class ForumRepository(
             "tid" to tid,
             "pid" to targetPid,
             "ratesubmit" to "yes",
-            "referer" to "https://bbs.binmt.cc/thread-$tid-1-1.html",
+            "referer" to "https://www.55188.com/thread-$tid-1-1.html",
             "score1" to "1",
             "score2" to amount.toString(),
         )
@@ -991,7 +991,7 @@ class ForumRepository(
                 "message" to message,
                 "topicsubmit" to "yes",
             ),
-            referer = "https://bbs.binmt.cc/forum-$fid-1.html",
+            referer = "https://www.55188.com/forum-$fid-1.html",
         )
     }
 
@@ -1020,7 +1020,7 @@ class ForumRepository(
         val body = http.post(
             url,
             params,
-            referer = "https://bbs.binmt.cc/forum.php?mod=post&action=newthread&fid=$fid&mobile=2",
+            referer = "https://www.55188.com/forum.php?mod=post&action=newthread&fid=$fid&mobile=2",
         )
         ForumParser.parseNewThreadResult(body)
     }

@@ -35,7 +35,7 @@ class HttpClient(
     val cookieStore: CookieStore = CookieStore(),
 ) {
 
-    val host: String = baseUrl.toHttpUrlOrNull()?.host ?: "bbs.binmt.cc"
+    val host: String = baseUrl.toHttpUrlOrNull()?.host ?: "www.55188.com"
 
     private val rateLimiter = RateLimiter()
 
@@ -359,7 +359,7 @@ private data class GetResult(
     }
 
     companion object {
-        const val BASE_URL = "https://bbs.binmt.cc/"
+        const val BASE_URL = "https://www.55188.com/"
         const val MOBILE_UA =
             "Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 " +
                 "(KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"

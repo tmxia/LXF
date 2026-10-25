@@ -50,7 +50,7 @@ import org.jsoup.nodes.Element
 
 object ForumParser {
 
-    private const val BASE = "https://bbs.binmt.cc/"
+    private const val BASE = "https://www.55188.com/"
     private val RE_TID = Regex("thread-(\\d+)")
     private val RE_FID = Regex("forum-(\\d+)-")
     private val RE_UID = Regex("uid=(\\d+)")
