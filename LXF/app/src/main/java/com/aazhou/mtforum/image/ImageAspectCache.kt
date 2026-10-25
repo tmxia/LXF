@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.image
+package com.aazhou.lxforum.image
 
 import android.content.Context
 import androidx.compose.runtime.mutableStateMapOf

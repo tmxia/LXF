@@ -1,6 +1,6 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.image.imageAspectRatio
+import com.aazhou.lxforum.image.imageAspectRatio
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

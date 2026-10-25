@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.verify
+package com.aazhou.lxforum.ui.screen.verify
 
 import android.annotation.SuppressLint
 import android.webkit.CookieManager
@@ -21,10 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.data.network.HttpClient
-import com.aazhou.mtforum.data.network.WafSolver
-import com.aazhou.mtforum.data.platform.CapabilityRegistry
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.data.network.HttpClient
+import com.aazhou.lxforum.data.network.WafSolver
+import com.aazhou.lxforum.data.platform.CapabilityRegistry
 
 
 

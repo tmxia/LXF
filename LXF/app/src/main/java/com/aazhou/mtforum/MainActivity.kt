@@ -1,4 +1,4 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,8 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.aazhou.mtforum.ui.nav.AppRoot
-import com.aazhou.mtforum.ui.theme.MtfTheme
+import com.aazhou.lxforum.ui.nav.AppRoot
+import com.aazhou.lxforum.ui.theme.MtfTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)

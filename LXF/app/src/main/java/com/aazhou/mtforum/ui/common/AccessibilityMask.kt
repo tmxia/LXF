@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.common
+package com.aazhou.lxforum.ui.common
 
 import android.view.View
 import androidx.compose.runtime.Composable

@@ -1,9 +1,9 @@
-package com.aazhou.mtforum.ui.screen.history
+package com.aazhou.lxforum.ui.screen.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.model.HistoryItem
-import com.aazhou.mtforum.data.repo.HistoryStore
+import com.aazhou.lxforum.data.model.HistoryItem
+import com.aazhou.lxforum.data.repo.HistoryStore
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn

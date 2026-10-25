@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.common
+package com.aazhou.lxforum.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,11 +24,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.Thread
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.Thread
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
 
 
 

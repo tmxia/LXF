@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.threaddetail
+package com.aazhou.lxforum.ui.screen.threaddetail
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.common
+package com.aazhou.lxforum.ui.common
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -30,8 +30,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

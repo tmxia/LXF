@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.common
+package com.aazhou.lxforum.ui.common
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.gestures.detectTapGestures

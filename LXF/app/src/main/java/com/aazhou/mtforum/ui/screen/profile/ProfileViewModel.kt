@@ -1,12 +1,12 @@
-package com.aazhou.mtforum.ui.screen.profile
+package com.aazhou.lxforum.ui.screen.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.cache.CacheKeys
-import com.aazhou.mtforum.data.cache.ContentCache
-import com.aazhou.mtforum.data.model.UserProfile
-import com.aazhou.mtforum.data.repo.ForumRepository
-import com.aazhou.mtforum.data.repo.SessionStore
+import com.aazhou.lxforum.data.cache.CacheKeys
+import com.aazhou.lxforum.data.cache.ContentCache
+import com.aazhou.lxforum.data.model.UserProfile
+import com.aazhou.lxforum.data.repo.ForumRepository
+import com.aazhou.lxforum.data.repo.SessionStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

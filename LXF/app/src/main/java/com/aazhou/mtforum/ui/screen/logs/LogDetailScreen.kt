@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.logs
+package com.aazhou.lxforum.ui.screen.logs
 
 import android.content.Context
 import android.content.Intent
@@ -17,7 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import com.aazhou.mtforum.ui.common.MtfConfirmDialog
+import com.aazhou.lxforum.ui.common.MtfConfirmDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,17 +42,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.aazhou.mtforum.BuildConfig
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.log.LogEntry
-import com.aazhou.mtforum.data.log.toText
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.EmptyBox
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.common.saveTextDocument
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.BuildConfig
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.log.LogEntry
+import com.aazhou.lxforum.data.log.toText
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.EmptyBox
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.saveTextDocument
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

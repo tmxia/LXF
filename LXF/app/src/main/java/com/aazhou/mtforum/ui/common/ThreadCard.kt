@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.common
+package com.aazhou.lxforum.ui.common
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -40,16 +40,16 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.Thread
-import com.aazhou.mtforum.image.GridImageSize
-import com.aazhou.mtforum.image.postImageRequest
-import com.aazhou.mtforum.image.smallImageRequest
-import com.aazhou.mtforum.ui.common.container
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.MtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
-import com.aazhou.mtforum.ui.theme.dimImageInDark
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.Thread
+import com.aazhou.lxforum.image.GridImageSize
+import com.aazhou.lxforum.image.postImageRequest
+import com.aazhou.lxforum.image.smallImageRequest
+import com.aazhou.lxforum.ui.common.container
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.MtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.ui.theme.dimImageInDark
 
 
 

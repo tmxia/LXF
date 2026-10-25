@@ -1,9 +1,9 @@
-package com.aazhou.mtforum.ui.screen.login
+package com.aazhou.lxforum.ui.screen.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.repo.ForumRepository
-import com.aazhou.mtforum.data.repo.SessionStore
+import com.aazhou.lxforum.data.repo.ForumRepository
+import com.aazhou.lxforum.data.repo.SessionStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

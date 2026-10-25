@@ -1,9 +1,9 @@
-package com.aazhou.mtforum.ui.screen.logs
+package com.aazhou.lxforum.ui.screen.logs
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.log.LogEntry
-import com.aazhou.mtforum.data.log.LogStore
+import com.aazhou.lxforum.data.log.LogEntry
+import com.aazhou.lxforum.data.log.LogStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

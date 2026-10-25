@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.threadlist
+package com.aazhou.lxforum.ui.screen.threadlist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,29 +45,29 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.Thread
-import com.aazhou.mtforum.data.repo.ForumSort
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.EmptyBox
-import com.aazhou.mtforum.ui.common.ErrorBox
-import com.aazhou.mtforum.ui.common.ImagePreview
-import com.aazhou.mtforum.ui.common.LoadingBox
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.ui.common.RankCard
-import com.aazhou.mtforum.ui.common.RankCollapsedLimit
-import com.aazhou.mtforum.ui.common.SwipeTabIndicator
-import com.aazhou.mtforum.ui.common.ThreadCard
-import com.aazhou.mtforum.ui.common.UiState
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.common.container
-import com.aazhou.mtforum.ui.common.onDoubleTapToTop
-import com.aazhou.mtforum.ui.common.scrollToNewest
-import com.aazhou.mtforum.ui.common.reportViewportAtTop
-import com.aazhou.mtforum.ui.common.scrollToTop
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.accentTextColor
-import com.aazhou.mtforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.Thread
+import com.aazhou.lxforum.data.repo.ForumSort
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.EmptyBox
+import com.aazhou.lxforum.ui.common.ErrorBox
+import com.aazhou.lxforum.ui.common.ImagePreview
+import com.aazhou.lxforum.ui.common.LoadingBox
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.ui.common.RankCard
+import com.aazhou.lxforum.ui.common.RankCollapsedLimit
+import com.aazhou.lxforum.ui.common.SwipeTabIndicator
+import com.aazhou.lxforum.ui.common.ThreadCard
+import com.aazhou.lxforum.ui.common.UiState
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.container
+import com.aazhou.lxforum.ui.common.onDoubleTapToTop
+import com.aazhou.lxforum.ui.common.scrollToNewest
+import com.aazhou.lxforum.ui.common.reportViewportAtTop
+import com.aazhou.lxforum.ui.common.scrollToTop
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.accentTextColor
+import com.aazhou.lxforum.ui.theme.bodyTextColor
 import kotlinx.coroutines.launch
 
 
@@ -204,7 +204,7 @@ fun ThreadListScreen(
 
     
     blockTarget?.let { target ->
-        com.aazhou.mtforum.ui.common.BlockUserDialog(
+        com.aazhou.lxforum.ui.common.BlockUserDialog(
             targetName = target.authorName ?: "该用户",
             isBlock = true,
             onDismiss = { blockTarget = null },

@@ -1,16 +1,16 @@
-package com.aazhou.mtforum.ui.screen.user
+package com.aazhou.lxforum.ui.screen.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.cache.CacheKeys
-import com.aazhou.mtforum.data.cache.ContentCache
-import com.aazhou.mtforum.data.model.UserProfile
-import com.aazhou.mtforum.data.repo.ActionStore
-import com.aazhou.mtforum.data.repo.BlockedUsersStore
-import com.aazhou.mtforum.data.repo.ForumRepository
-import com.aazhou.mtforum.data.repo.SessionStore
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.UiState
+import com.aazhou.lxforum.data.cache.CacheKeys
+import com.aazhou.lxforum.data.cache.ContentCache
+import com.aazhou.lxforum.data.model.UserProfile
+import com.aazhou.lxforum.data.repo.ActionStore
+import com.aazhou.lxforum.data.repo.BlockedUsersStore
+import com.aazhou.lxforum.data.repo.ForumRepository
+import com.aazhou.lxforum.data.repo.SessionStore
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

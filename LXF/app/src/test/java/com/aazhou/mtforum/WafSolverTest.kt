@@ -1,6 +1,6 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.data.network.WafSolver
+import com.aazhou.lxforum.data.network.WafSolver
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

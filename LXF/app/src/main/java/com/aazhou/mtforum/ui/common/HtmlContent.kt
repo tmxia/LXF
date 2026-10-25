@@ -1,6 +1,6 @@
-package com.aazhou.mtforum.ui.common
+package com.aazhou.lxforum.ui.common
 
-import com.aazhou.mtforum.data.parser.ForumParser
+import com.aazhou.lxforum.data.parser.ForumParser
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node

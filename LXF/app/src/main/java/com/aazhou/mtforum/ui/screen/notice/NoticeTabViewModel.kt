@@ -1,16 +1,16 @@
-package com.aazhou.mtforum.ui.screen.notice
+package com.aazhou.lxforum.ui.screen.notice
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.cache.CacheKeys
-import com.aazhou.mtforum.data.cache.ContentCache
-import com.aazhou.mtforum.data.model.NoticeGroup
-import com.aazhou.mtforum.data.model.NoticeTab
-import com.aazhou.mtforum.data.model.tabs
-import com.aazhou.mtforum.data.repo.ForumRepository
-import com.aazhou.mtforum.data.repo.NoticeRepo
-import com.aazhou.mtforum.data.repo.NoticeUnreadStore
-import com.aazhou.mtforum.ui.common.UiState
+import com.aazhou.lxforum.data.cache.CacheKeys
+import com.aazhou.lxforum.data.cache.ContentCache
+import com.aazhou.lxforum.data.model.NoticeGroup
+import com.aazhou.lxforum.data.model.NoticeTab
+import com.aazhou.lxforum.data.model.tabs
+import com.aazhou.lxforum.data.repo.ForumRepository
+import com.aazhou.lxforum.data.repo.NoticeRepo
+import com.aazhou.lxforum.data.repo.NoticeUnreadStore
+import com.aazhou.lxforum.ui.common.UiState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

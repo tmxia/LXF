@@ -1,7 +1,7 @@
-package com.aazhou.mtforum.ui.screen.chat
+package com.aazhou.lxforum.ui.screen.chat
 
-import com.aazhou.mtforum.data.model.ChatConversation
-import com.aazhou.mtforum.data.model.ChatMessage
+import com.aazhou.lxforum.data.model.ChatConversation
+import com.aazhou.lxforum.data.model.ChatMessage
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

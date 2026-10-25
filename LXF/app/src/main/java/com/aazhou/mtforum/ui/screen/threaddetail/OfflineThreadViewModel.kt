@@ -1,12 +1,12 @@
-package com.aazhou.mtforum.ui.screen.threaddetail
+package com.aazhou.lxforum.ui.screen.threaddetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.download.ThreadArchiveStore
-import com.aazhou.mtforum.data.model.ThreadPage
-import com.aazhou.mtforum.data.model.ThreadSnapshot
-import com.aazhou.mtforum.ui.common.UiState
-import com.aazhou.mtforum.ui.common.isWaterReply
+import com.aazhou.lxforum.data.download.ThreadArchiveStore
+import com.aazhou.lxforum.data.model.ThreadPage
+import com.aazhou.lxforum.data.model.ThreadSnapshot
+import com.aazhou.lxforum.ui.common.UiState
+import com.aazhou.lxforum.ui.common.isWaterReply
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

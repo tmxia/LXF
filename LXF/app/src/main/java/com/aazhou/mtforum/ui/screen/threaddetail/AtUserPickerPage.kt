@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.threaddetail
+package com.aazhou.lxforum.ui.screen.threaddetail
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -56,16 +56,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.AtUser
-import com.aazhou.mtforum.image.smallImageRequest
-import com.aazhou.mtforum.ui.common.EmptyBox
-import com.aazhou.mtforum.ui.common.LoadingBox
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
-import com.aazhou.mtforum.ui.theme.dimImageInDark
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.AtUser
+import com.aazhou.lxforum.image.smallImageRequest
+import com.aazhou.lxforum.ui.common.EmptyBox
+import com.aazhou.lxforum.ui.common.LoadingBox
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.ui.theme.dimImageInDark
 
 @Composable
 fun AtUserPickerPage(

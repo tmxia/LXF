@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.user
+package com.aazhou.lxforum.ui.screen.user
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -56,23 +56,23 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.UserProfile
-import com.aazhou.mtforum.image.smallImageRequest
-import com.aazhou.mtforum.ui.common.ImagePreview
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.ErrorBox
-import com.aazhou.mtforum.ui.common.LoadingBox
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.ui.common.UiState
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.common.onDoubleTapToTop
-import com.aazhou.mtforum.ui.common.scrollToTop
-import com.aazhou.mtforum.ui.screen.profile.ProfileContent
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
-import com.aazhou.mtforum.ui.theme.dimImageInDark
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.UserProfile
+import com.aazhou.lxforum.image.smallImageRequest
+import com.aazhou.lxforum.ui.common.ImagePreview
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.ErrorBox
+import com.aazhou.lxforum.ui.common.LoadingBox
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.ui.common.UiState
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.onDoubleTapToTop
+import com.aazhou.lxforum.ui.common.scrollToTop
+import com.aazhou.lxforum.ui.screen.profile.ProfileContent
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.ui.theme.dimImageInDark
 import kotlinx.coroutines.launch
 
 
@@ -219,7 +219,7 @@ fun UserProfileScreen(
                 }
 
                 if (showBlockDialog) {
-                    com.aazhou.mtforum.ui.common.BlockUserDialog(
+                    com.aazhou.lxforum.ui.common.BlockUserDialog(
                         targetName = profile.name.orEmpty().ifBlank { "该用户" },
                         isBlock = !isBlocked,
                         isSubmitting = isOperating,

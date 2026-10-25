@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.theme
+package com.aazhou.lxforum.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

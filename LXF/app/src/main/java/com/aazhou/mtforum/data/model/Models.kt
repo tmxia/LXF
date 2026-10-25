@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.data.model
+package com.aazhou.lxforum.data.model
 
 import kotlinx.serialization.Serializable
 

@@ -1,9 +1,9 @@
-package com.aazhou.mtforum.data.export
+package com.aazhou.lxforum.data.export
 
-import com.aazhou.mtforum.data.model.Post
-import com.aazhou.mtforum.data.model.ThreadPage
-import com.aazhou.mtforum.ui.common.imageUrl
-import com.aazhou.mtforum.ui.common.isSmiley
+import com.aazhou.lxforum.data.model.Post
+import com.aazhou.lxforum.data.model.ThreadPage
+import com.aazhou.lxforum.ui.common.imageUrl
+import com.aazhou.lxforum.ui.common.isSmiley
 import java.text.SimpleDateFormat
 import java.util.Base64
 import java.util.Date

@@ -1,11 +1,11 @@
-package com.aazhou.mtforum.ui.screen.downloads
+package com.aazhou.lxforum.ui.screen.downloads
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.download.ThreadArchiveStore
-import com.aazhou.mtforum.data.model.DownloadedThread
-import com.aazhou.mtforum.data.repo.DownloadStore
-import com.aazhou.mtforum.ui.common.deleteThreadDownload
+import com.aazhou.lxforum.data.download.ThreadArchiveStore
+import com.aazhou.lxforum.data.model.DownloadedThread
+import com.aazhou.lxforum.data.repo.DownloadStore
+import com.aazhou.lxforum.ui.common.deleteThreadDownload
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 

@@ -1,6 +1,6 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.ui.common.toAnnotatedString
+import com.aazhou.lxforum.ui.common.toAnnotatedString
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

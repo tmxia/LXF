@@ -1,6 +1,6 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.ui.common.isWaterReply
+import com.aazhou.lxforum.ui.common.isWaterReply
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

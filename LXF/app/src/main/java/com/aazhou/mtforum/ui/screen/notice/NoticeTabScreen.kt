@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.notice
+package com.aazhou.lxforum.ui.screen.notice
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -56,28 +56,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.Notice
-import com.aazhou.mtforum.data.model.NoticeGroup
-import com.aazhou.mtforum.data.model.PrivateMessage
-import com.aazhou.mtforum.data.model.tabs
-import com.aazhou.mtforum.data.repo.NoticeRepo
-import com.aazhou.mtforum.image.smallImageRequest
-import com.aazhou.mtforum.ui.common.EmptyBox
-import com.aazhou.mtforum.ui.common.ErrorBox
-import com.aazhou.mtforum.ui.common.LoadingBox
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.ui.common.SwipeTabIndicator
-import com.aazhou.mtforum.ui.common.UiState
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.common.bottomBarContentPadding
-import com.aazhou.mtforum.ui.common.scrollToNewest
-import com.aazhou.mtforum.ui.common.reportViewportAtTop
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.accentTextColor
-import com.aazhou.mtforum.ui.theme.bodyTextColor
-import com.aazhou.mtforum.ui.theme.dimImageInDark
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.Notice
+import com.aazhou.lxforum.data.model.NoticeGroup
+import com.aazhou.lxforum.data.model.PrivateMessage
+import com.aazhou.lxforum.data.model.tabs
+import com.aazhou.lxforum.data.repo.NoticeRepo
+import com.aazhou.lxforum.image.smallImageRequest
+import com.aazhou.lxforum.ui.common.EmptyBox
+import com.aazhou.lxforum.ui.common.ErrorBox
+import com.aazhou.lxforum.ui.common.LoadingBox
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.ui.common.SwipeTabIndicator
+import com.aazhou.lxforum.ui.common.UiState
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.bottomBarContentPadding
+import com.aazhou.lxforum.ui.common.scrollToNewest
+import com.aazhou.lxforum.ui.common.reportViewportAtTop
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.accentTextColor
+import com.aazhou.lxforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.ui.theme.dimImageInDark
 import kotlinx.coroutines.launch
 
 

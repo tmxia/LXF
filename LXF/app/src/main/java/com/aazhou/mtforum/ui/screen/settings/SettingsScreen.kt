@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.settings
+package com.aazhou.lxforum.ui.screen.settings
 
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.Canvas
@@ -76,20 +76,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.imageLoader
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.log.LogLevel
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.MtfConfirmDialog
-import com.aazhou.mtforum.ui.common.MtfSwitchRow
-import com.aazhou.mtforum.ui.common.MtfContentDialog
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.ui.common.container
-import com.aazhou.mtforum.ui.common.onDoubleTapToTop
-import com.aazhou.mtforum.ui.common.scrollToTop
-import com.aazhou.mtforum.ui.theme.DefaultPrimaryDay
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.log.LogLevel
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.MtfConfirmDialog
+import com.aazhou.lxforum.ui.common.MtfSwitchRow
+import com.aazhou.lxforum.ui.common.MtfContentDialog
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.ui.common.container
+import com.aazhou.lxforum.ui.common.onDoubleTapToTop
+import com.aazhou.lxforum.ui.common.scrollToTop
+import com.aazhou.lxforum.ui.theme.DefaultPrimaryDay
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -324,7 +324,7 @@ fun SettingsScreen(
                         )
                     }
                     Text(
-                        "v${com.aazhou.mtforum.BuildConfig.VERSION_NAME}",
+                        "v${com.aazhou.lxforum.BuildConfig.VERSION_NAME}",
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium,

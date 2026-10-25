@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

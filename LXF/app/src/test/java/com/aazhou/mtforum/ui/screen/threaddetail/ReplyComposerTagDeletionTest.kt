@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.threaddetail
+package com.aazhou.lxforum.ui.screen.threaddetail
 
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue

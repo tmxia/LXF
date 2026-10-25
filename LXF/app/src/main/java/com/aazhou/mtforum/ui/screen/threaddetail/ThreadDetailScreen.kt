@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.threaddetail
+package com.aazhou.lxforum.ui.screen.threaddetail
 
 import android.content.Context
 import android.content.Intent
@@ -40,8 +40,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import com.aazhou.mtforum.ui.common.MtfConfirmDialog
-import com.aazhou.mtforum.ui.common.MtfContentDialog
+import com.aazhou.lxforum.ui.common.MtfConfirmDialog
+import com.aazhou.lxforum.ui.common.MtfContentDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -103,38 +103,38 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.imageLoader
-import com.aazhou.mtforum.data.model.Post
-import com.aazhou.mtforum.data.parser.SmileyPack
-import com.aazhou.mtforum.image.smallImageRequest
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.BottomBarBottomMargin
-import com.aazhou.mtforum.ui.common.ReplyBarCapsuleHeight
-import com.aazhou.mtforum.ui.common.ReplyBarTopPadding
-import com.aazhou.mtforum.ui.common.replyBarContentPadding
-import com.aazhou.mtforum.ui.common.EmptyBox
-import com.aazhou.mtforum.ui.common.ErrorBox
-import com.aazhou.mtforum.ui.common.ImagePreview
-import com.aazhou.mtforum.image.ImageAspectCache
-import com.aazhou.mtforum.ui.common.LoadingBox
-import com.aazhou.mtforum.ui.common.PostContent
-import com.aazhou.mtforum.ui.common.saveAttachment
-import com.aazhou.mtforum.ui.common.saveThreadDownload
-import com.aazhou.mtforum.ui.common.UiState
-import com.aazhou.mtforum.ui.common.VideoPlayerScreen
-import com.aazhou.mtforum.ui.common.scrollToTop
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.common.collectImageUrls
-import com.aazhou.mtforum.ui.common.container
-import com.aazhou.mtforum.ui.common.openForumLink
-import com.aazhou.mtforum.ui.common.plainTextOf
-import com.aazhou.mtforum.ui.common.onDoubleTapToTop
-import com.aazhou.mtforum.ui.common.TopBarVerticalPadding
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
-import com.aazhou.mtforum.ui.theme.accentTextColor
-import com.aazhou.mtforum.ui.theme.dimImageInDark
+import com.aazhou.lxforum.data.model.Post
+import com.aazhou.lxforum.data.parser.SmileyPack
+import com.aazhou.lxforum.image.smallImageRequest
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.BottomBarBottomMargin
+import com.aazhou.lxforum.ui.common.ReplyBarCapsuleHeight
+import com.aazhou.lxforum.ui.common.ReplyBarTopPadding
+import com.aazhou.lxforum.ui.common.replyBarContentPadding
+import com.aazhou.lxforum.ui.common.EmptyBox
+import com.aazhou.lxforum.ui.common.ErrorBox
+import com.aazhou.lxforum.ui.common.ImagePreview
+import com.aazhou.lxforum.image.ImageAspectCache
+import com.aazhou.lxforum.ui.common.LoadingBox
+import com.aazhou.lxforum.ui.common.PostContent
+import com.aazhou.lxforum.ui.common.saveAttachment
+import com.aazhou.lxforum.ui.common.saveThreadDownload
+import com.aazhou.lxforum.ui.common.UiState
+import com.aazhou.lxforum.ui.common.VideoPlayerScreen
+import com.aazhou.lxforum.ui.common.scrollToTop
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.collectImageUrls
+import com.aazhou.lxforum.ui.common.container
+import com.aazhou.lxforum.ui.common.openForumLink
+import com.aazhou.lxforum.ui.common.plainTextOf
+import com.aazhou.lxforum.ui.common.onDoubleTapToTop
+import com.aazhou.lxforum.ui.common.TopBarVerticalPadding
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.ui.theme.accentTextColor
+import com.aazhou.lxforum.ui.theme.dimImageInDark
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import kotlinx.coroutines.delay
@@ -1339,7 +1339,7 @@ internal fun ThreadDetailTopBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            painterResource(com.aazhou.mtforum.R.drawable.ic_back),
+            painterResource(com.aazhou.lxforum.R.drawable.ic_back),
             contentDescription = "返回",
             tint = bodyTextColor(),
             modifier = Modifier
@@ -1448,7 +1448,7 @@ private fun MoreMenu(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                painter = painterResource(com.aazhou.mtforum.R.drawable.ic_more),
+                painter = painterResource(com.aazhou.lxforum.R.drawable.ic_more),
                 contentDescription = "更多",
                 tint = bodyTextColor(),
                 modifier = Modifier.size(22.dp),
@@ -1474,7 +1474,7 @@ private fun MoreMenu(
                     contentPadding = itemPadding,
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(com.aazhou.mtforum.R.drawable.ic_post_edit),
+                            painter = painterResource(com.aazhou.lxforum.R.drawable.ic_post_edit),
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(18.dp),
@@ -1491,7 +1491,7 @@ private fun MoreMenu(
                 contentPadding = itemPadding,
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(com.aazhou.mtforum.R.drawable.ic_reward_gift),
+                        painter = painterResource(com.aazhou.lxforum.R.drawable.ic_reward_gift),
                         contentDescription = null,
                         tint = colors.gold,
                         modifier = Modifier.size(18.dp),
@@ -1507,7 +1507,7 @@ private fun MoreMenu(
                 contentPadding = itemPadding,
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(com.aazhou.mtforum.R.drawable.ic_report_shield),
+                        painter = painterResource(com.aazhou.lxforum.R.drawable.ic_report_shield),
                         contentDescription = null,
                         tint = Color(0xFFEF4444),
                         modifier = Modifier.size(18.dp),
@@ -1536,7 +1536,7 @@ private fun MoreMenu(
                         )
                     } else {
                         Icon(
-                            painter = painterResource(com.aazhou.mtforum.R.drawable.ic_download),
+                            painter = painterResource(com.aazhou.lxforum.R.drawable.ic_download),
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(18.dp),
@@ -1659,7 +1659,7 @@ private fun HiddenContentCard(onUnlock: () -> Unit) {
                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
         ) {
             Icon(
-                painterResource(com.aazhou.mtforum.R.drawable.ic_lock_outline),
+                painterResource(com.aazhou.lxforum.R.drawable.ic_lock_outline),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(18.dp),
@@ -1910,7 +1910,7 @@ internal fun ReplyBlock(
             TimeLine(reply)
             Spacer(Modifier.weight(1f))
             Icon(
-                painterResource(com.aazhou.mtforum.R.drawable.ic_reply),
+                painterResource(com.aazhou.lxforum.R.drawable.ic_reply),
                 contentDescription = "回复",
                 tint = colors.iconSecondary,
                 modifier = Modifier
@@ -2009,7 +2009,7 @@ private fun ReplyBar(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    painterResource(com.aazhou.mtforum.R.drawable.ic_comment_pen),
+                    painterResource(com.aazhou.lxforum.R.drawable.ic_comment_pen),
                     contentDescription = null,
                     tint = bodyTextColor(),
                     modifier = Modifier.size(22.dp),
@@ -2048,7 +2048,7 @@ private fun ReplyBar(
                     BarCount(
                         icon = {
                             Icon(
-                                painterResource(com.aazhou.mtforum.R.drawable.ic_reply),
+                                painterResource(com.aazhou.lxforum.R.drawable.ic_reply),
                                 contentDescription = "查看评论",
                                 tint = bodyTextColor(),
                                 modifier = Modifier.size(22.dp),
@@ -2062,7 +2062,7 @@ private fun ReplyBar(
                     BarCount(
                         icon = {
                             Icon(
-                                painterResource(com.aazhou.mtforum.R.drawable.ic_like_thumb),
+                                painterResource(com.aazhou.lxforum.R.drawable.ic_like_thumb),
                                 contentDescription = "点赞",
                                 tint = if (liked) MaterialTheme.colorScheme.primary else bodyTextColor(),
                                 modifier = Modifier.size(22.dp),
@@ -2076,7 +2076,7 @@ private fun ReplyBar(
                     BarCount(
                         icon = {
                             Icon(
-                                painterResource(com.aazhou.mtforum.R.drawable.ic_favorite_outline),
+                                painterResource(com.aazhou.lxforum.R.drawable.ic_favorite_outline),
                                 contentDescription = "收藏",
                                 tint = if (favorited) MaterialTheme.colorScheme.primary else bodyTextColor(),
                                 modifier = Modifier.size(22.dp),
@@ -2090,7 +2090,7 @@ private fun ReplyBar(
                     BarCount(
                         icon = {
                             Icon(
-                                painterResource(com.aazhou.mtforum.R.drawable.ic_share),
+                                painterResource(com.aazhou.lxforum.R.drawable.ic_share),
                                 contentDescription = "分享",
                                 tint = bodyTextColor(),
                                 modifier = Modifier.size(22.dp),

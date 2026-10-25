@@ -1,7 +1,7 @@
-package com.aazhou.mtforum.ui.screen.notice
+package com.aazhou.lxforum.ui.screen.notice
 
-import com.aazhou.mtforum.data.model.Notice
-import com.aazhou.mtforum.data.model.PrivateMessage
+import com.aazhou.lxforum.data.model.Notice
+import com.aazhou.lxforum.data.model.PrivateMessage
 import kotlinx.serialization.Serializable
 import java.util.Calendar
 

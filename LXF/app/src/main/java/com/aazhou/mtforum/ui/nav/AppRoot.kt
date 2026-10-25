@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.nav
+package com.aazhou.lxforum.ui.nav
 
 import android.net.Uri
 import androidx.compose.animation.EnterTransition
@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.aazhou.mtforum.R
+import com.aazhou.lxforum.R
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -29,29 +29,29 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.aazhou.mtforum.ui.common.container
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.GlobalToastHost
-import com.aazhou.mtforum.ui.common.maskAccessibility
-import com.aazhou.mtforum.ui.screen.forumlist.ForumListScreen
-import com.aazhou.mtforum.ui.screen.downloads.DownloadsScreen
-import com.aazhou.mtforum.ui.screen.home.HomeScreen
-import com.aazhou.mtforum.ui.screen.logs.LogDetailScreen
-import com.aazhou.mtforum.ui.screen.logs.LogsScreen
-import com.aazhou.mtforum.ui.screen.login.LoginScreen
-import com.aazhou.mtforum.data.model.NoticeGroup
-import com.aazhou.mtforum.ui.screen.notice.NoticeScreen
-import com.aazhou.mtforum.ui.screen.notice.NoticeTabScreen
-import com.aazhou.mtforum.ui.screen.postedit.PostEditScreen
-import com.aazhou.mtforum.ui.screen.profile.ProfileScreen
-import com.aazhou.mtforum.ui.screen.search.SearchScreen
-import com.aazhou.mtforum.ui.screen.settings.SettingsScreen
-import com.aazhou.mtforum.ui.screen.threaddetail.ThreadDetailScreen
-import com.aazhou.mtforum.ui.screen.threaddetail.DownloadedThreadScreen
-import com.aazhou.mtforum.ui.screen.threadlist.ThreadListScreen
-import com.aazhou.mtforum.ui.screen.user.UserProfileScreen
-import com.aazhou.mtforum.ui.screen.chat.ChatScreen
-import com.aazhou.mtforum.ui.screen.verify.WafVerificationScreen
+import com.aazhou.lxforum.ui.common.container
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.GlobalToastHost
+import com.aazhou.lxforum.ui.common.maskAccessibility
+import com.aazhou.lxforum.ui.screen.forumlist.ForumListScreen
+import com.aazhou.lxforum.ui.screen.downloads.DownloadsScreen
+import com.aazhou.lxforum.ui.screen.home.HomeScreen
+import com.aazhou.lxforum.ui.screen.logs.LogDetailScreen
+import com.aazhou.lxforum.ui.screen.logs.LogsScreen
+import com.aazhou.lxforum.ui.screen.login.LoginScreen
+import com.aazhou.lxforum.data.model.NoticeGroup
+import com.aazhou.lxforum.ui.screen.notice.NoticeScreen
+import com.aazhou.lxforum.ui.screen.notice.NoticeTabScreen
+import com.aazhou.lxforum.ui.screen.postedit.PostEditScreen
+import com.aazhou.lxforum.ui.screen.profile.ProfileScreen
+import com.aazhou.lxforum.ui.screen.search.SearchScreen
+import com.aazhou.lxforum.ui.screen.settings.SettingsScreen
+import com.aazhou.lxforum.ui.screen.threaddetail.ThreadDetailScreen
+import com.aazhou.lxforum.ui.screen.threaddetail.DownloadedThreadScreen
+import com.aazhou.lxforum.ui.screen.threadlist.ThreadListScreen
+import com.aazhou.lxforum.ui.screen.user.UserProfileScreen
+import com.aazhou.lxforum.ui.screen.chat.ChatScreen
+import com.aazhou.lxforum.ui.screen.verify.WafVerificationScreen
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import androidx.navigation.NavBackStackEntry
@@ -252,7 +252,7 @@ fun AppRoot(onToggleTheme: () -> Unit, openNotice: Boolean = false) {
                 )
             }
             composable("history") {
-            com.aazhou.mtforum.ui.screen.history.HistoryScreen(
+            com.aazhou.lxforum.ui.screen.history.HistoryScreen(
                 container = container,
                 onBack = { navController.popBackStack() },
                 onOpenThread = { tid -> navController.navigate("thread/$tid") },
@@ -504,7 +504,7 @@ fun AppRoot(onToggleTheme: () -> Unit, openNotice: Boolean = false) {
             }
 
             composable(Routes.MY_POSTS) {
-                com.aazhou.mtforum.ui.screen.myposts.MyPostsScreen(
+                com.aazhou.lxforum.ui.screen.myposts.MyPostsScreen(
                     onBack = { navController.popBackStack() },
                     onThreadClick = { tid -> navController.navigate(Routes.thread(tid)) },
                     onUserClick = navigateToUser,
@@ -514,7 +514,7 @@ fun AppRoot(onToggleTheme: () -> Unit, openNotice: Boolean = false) {
                 Routes.USER_POSTS,
                 arguments = listOf(navArgument("uid") { type = NavType.StringType }),
             ) { entry ->
-                com.aazhou.mtforum.ui.screen.user.UserPostsScreen(
+                com.aazhou.lxforum.ui.screen.user.UserPostsScreen(
                     uid = entry.arguments?.getString("uid").orEmpty(),
                     onBack = { navController.popBackStack() },
                     onThreadClick = { tid -> navController.navigate(Routes.thread(tid)) },
@@ -523,7 +523,7 @@ fun AppRoot(onToggleTheme: () -> Unit, openNotice: Boolean = false) {
             }
 
             composable(Routes.DRAFTS) {
-                com.aazhou.mtforum.ui.screen.drafts.DraftsScreen(
+                com.aazhou.lxforum.ui.screen.drafts.DraftsScreen(
                     onBack = { navController.popBackStack() },
                     
                     onOpenDraft = { fid, name -> navController.navigate(Routes.post(fid, name)) },
@@ -531,7 +531,7 @@ fun AppRoot(onToggleTheme: () -> Unit, openNotice: Boolean = false) {
             }
 
             composable(Routes.MY_FAVORITES) {
-                com.aazhou.mtforum.ui.screen.myfavorites.MyFavoritesScreen(
+                com.aazhou.lxforum.ui.screen.myfavorites.MyFavoritesScreen(
                     onBack = { navController.popBackStack() },
                     onThreadClick = { tid -> navController.navigate(Routes.thread(tid)) },
                     onForumClick = { fid, name -> navController.navigate(Routes.forum(fid, name)) },
@@ -539,7 +539,7 @@ fun AppRoot(onToggleTheme: () -> Unit, openNotice: Boolean = false) {
             }
 
             composable(Routes.MY_FRIENDS) {
-                com.aazhou.mtforum.ui.screen.myfriends.MyFriendsScreen(
+                com.aazhou.lxforum.ui.screen.myfriends.MyFriendsScreen(
                     onBack = { navController.popBackStack() },
                     onUserClick = navigateToUser,
                 )
@@ -555,7 +555,7 @@ fun AppRoot(onToggleTheme: () -> Unit, openNotice: Boolean = false) {
                 ),
             ) { entry ->
                 val type = entry.arguments?.getString("type") ?: "following"
-                com.aazhou.mtforum.ui.screen.follow.FollowListScreen(
+                com.aazhou.lxforum.ui.screen.follow.FollowListScreen(
                     initialType = type,
                     onBack = { navController.popBackStack() },
                     onUserClick = navigateToUser,

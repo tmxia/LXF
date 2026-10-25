@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.history
+package com.aazhou.lxforum.ui.screen.history
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,13 +37,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.aazhou.mtforum.AppContainer
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.HistoryItem
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.AppContainer
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.HistoryItem
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +53,7 @@ fun HistoryScreen(
     onOpenThread: (String) -> Unit,
     onOpenForum: (String, String) -> Unit = { _, _ -> },
 ) {
-    val viewModel: HistoryViewModel = com.aazhou.mtforum.ui.common.appViewModel {
+    val viewModel: HistoryViewModel = com.aazhou.lxforum.ui.common.appViewModel {
         HistoryViewModel(it.historyStore)
     }
     val items by viewModel.items.collectAsStateWithLifecycle()

@@ -1,7 +1,7 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.data.export.dataUriOf
-import com.aazhou.mtforum.data.export.sanitizeContentHtml
+import com.aazhou.lxforum.data.export.dataUriOf
+import com.aazhou.lxforum.data.export.sanitizeContentHtml
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

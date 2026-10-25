@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.common
+package com.aazhou.lxforum.ui.common
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -45,10 +45,10 @@ import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
-import com.aazhou.mtforum.R
+import com.aazhou.lxforum.R
 import android.view.View
-import com.aazhou.mtforum.data.network.HttpClient
-import com.aazhou.mtforum.image.forumMediaClient
+import com.aazhou.lxforum.data.network.HttpClient
+import com.aazhou.lxforum.image.forumMediaClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

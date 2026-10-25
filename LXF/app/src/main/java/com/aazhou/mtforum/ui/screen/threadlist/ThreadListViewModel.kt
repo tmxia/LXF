@@ -1,13 +1,13 @@
-package com.aazhou.mtforum.ui.screen.threadlist
+package com.aazhou.lxforum.ui.screen.threadlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.cache.CacheKeys
-import com.aazhou.mtforum.data.cache.ContentCache
-import com.aazhou.mtforum.data.model.ForumPage
-import com.aazhou.mtforum.data.repo.ForumRepository
-import com.aazhou.mtforum.data.repo.ForumSort
-import com.aazhou.mtforum.ui.common.UiState
+import com.aazhou.lxforum.data.cache.CacheKeys
+import com.aazhou.lxforum.data.cache.ContentCache
+import com.aazhou.lxforum.data.model.ForumPage
+import com.aazhou.lxforum.data.repo.ForumRepository
+import com.aazhou.lxforum.data.repo.ForumSort
+import com.aazhou.lxforum.ui.common.UiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

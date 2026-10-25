@@ -1,11 +1,11 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
 import android.content.Context
 import android.net.Uri
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.aazhou.mtforum.data.model.DownloadedThread
+import com.aazhou.lxforum.data.model.DownloadedThread
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

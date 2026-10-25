@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
 import kotlinx.coroutines.flow.StateFlow
 

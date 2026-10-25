@@ -1,9 +1,9 @@
-package com.aazhou.mtforum.data.download
+package com.aazhou.lxforum.data.download
 
 import android.content.Context
 import android.net.Uri
-import com.aazhou.mtforum.data.export.sanitizeContentHtml
-import com.aazhou.mtforum.data.model.ThreadSnapshot
+import com.aazhou.lxforum.data.export.sanitizeContentHtml
+import com.aazhou.lxforum.data.model.ThreadSnapshot
 import java.io.File
 import java.security.MessageDigest
 import kotlinx.coroutines.Dispatchers

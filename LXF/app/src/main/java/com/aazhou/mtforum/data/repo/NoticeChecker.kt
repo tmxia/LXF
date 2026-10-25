@@ -1,7 +1,7 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
-import com.aazhou.mtforum.data.model.Notice
-import com.aazhou.mtforum.data.model.NoticeTab
+import com.aazhou.lxforum.data.model.Notice
+import com.aazhou.lxforum.data.model.NoticeTab
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope

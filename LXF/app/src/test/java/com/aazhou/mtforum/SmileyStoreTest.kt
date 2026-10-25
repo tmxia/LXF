@@ -1,7 +1,7 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.data.parser.SmileyPack
-import com.aazhou.mtforum.data.parser.SmileyParser
+import com.aazhou.lxforum.data.parser.SmileyPack
+import com.aazhou.lxforum.data.parser.SmileyParser
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Test

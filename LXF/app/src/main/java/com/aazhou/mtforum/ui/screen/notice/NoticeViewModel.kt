@@ -1,13 +1,13 @@
-package com.aazhou.mtforum.ui.screen.notice
+package com.aazhou.lxforum.ui.screen.notice
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.model.NoticeTab
-import com.aazhou.mtforum.data.model.PREFETCH_TABS
-import com.aazhou.mtforum.data.repo.ForumRepository
-import com.aazhou.mtforum.data.repo.NoticePollStore
-import com.aazhou.mtforum.data.repo.NoticeRepo
-import com.aazhou.mtforum.data.repo.NoticeUnreadStore
+import com.aazhou.lxforum.data.model.NoticeTab
+import com.aazhou.lxforum.data.model.PREFETCH_TABS
+import com.aazhou.lxforum.data.repo.ForumRepository
+import com.aazhou.lxforum.data.repo.NoticePollStore
+import com.aazhou.lxforum.data.repo.NoticeRepo
+import com.aazhou.lxforum.data.repo.NoticeUnreadStore
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

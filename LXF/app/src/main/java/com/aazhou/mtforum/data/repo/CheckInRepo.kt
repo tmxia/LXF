@@ -1,9 +1,9 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
-import com.aazhou.mtforum.data.model.CheckInResult
-import com.aazhou.mtforum.data.model.CheckInStatus
-import com.aazhou.mtforum.data.network.HttpClient
-import com.aazhou.mtforum.data.parser.ForumParser
+import com.aazhou.lxforum.data.model.CheckInResult
+import com.aazhou.lxforum.data.model.CheckInStatus
+import com.aazhou.lxforum.data.network.HttpClient
+import com.aazhou.lxforum.data.parser.ForumParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.login
+package com.aazhou.lxforum.ui.screen.login
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -42,10 +42,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.ui.common.MtfContentDialog
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.ui.common.MtfContentDialog
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
 
 
 

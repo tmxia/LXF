@@ -1,16 +1,16 @@
-package com.aazhou.mtforum.ui.screen.search
+package com.aazhou.lxforum.ui.screen.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.cache.CacheKeys
-import com.aazhou.mtforum.data.cache.ContentCache
-import com.aazhou.mtforum.data.model.AtUser
-import com.aazhou.mtforum.data.model.Forum
-import com.aazhou.mtforum.data.model.ForumGroup
-import com.aazhou.mtforum.data.model.SearchResult
-import com.aazhou.mtforum.data.model.SearchTab
-import com.aazhou.mtforum.data.repo.ForumRepository
-import com.aazhou.mtforum.ui.common.UiState
+import com.aazhou.lxforum.data.cache.CacheKeys
+import com.aazhou.lxforum.data.cache.ContentCache
+import com.aazhou.lxforum.data.model.AtUser
+import com.aazhou.lxforum.data.model.Forum
+import com.aazhou.lxforum.data.model.ForumGroup
+import com.aazhou.lxforum.data.model.SearchResult
+import com.aazhou.lxforum.data.model.SearchTab
+import com.aazhou.lxforum.data.repo.ForumRepository
+import com.aazhou.lxforum.ui.common.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.glass
+package com.aazhou.lxforum.ui.glass
 
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown

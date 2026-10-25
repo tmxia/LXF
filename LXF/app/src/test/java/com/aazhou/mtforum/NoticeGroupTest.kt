@@ -1,10 +1,10 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.data.model.BACKGROUND_TABS
-import com.aazhou.mtforum.data.model.NoticeGroup
-import com.aazhou.mtforum.data.model.NoticeTab
-import com.aazhou.mtforum.data.model.PREFETCH_TABS
-import com.aazhou.mtforum.data.model.tabs
+import com.aazhou.lxforum.data.model.BACKGROUND_TABS
+import com.aazhou.lxforum.data.model.NoticeGroup
+import com.aazhou.lxforum.data.model.NoticeTab
+import com.aazhou.lxforum.data.model.PREFETCH_TABS
+import com.aazhou.lxforum.data.model.tabs
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

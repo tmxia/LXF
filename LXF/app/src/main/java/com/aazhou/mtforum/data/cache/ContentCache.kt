@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.data.cache
+package com.aazhou.lxforum.data.cache
 
 import java.io.File
 import java.util.Base64

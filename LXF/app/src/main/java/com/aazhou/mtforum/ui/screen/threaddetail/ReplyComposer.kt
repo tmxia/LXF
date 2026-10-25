@@ -1,8 +1,8 @@
-package com.aazhou.mtforum.ui.screen.threaddetail
+package com.aazhou.lxforum.ui.screen.threaddetail
 
 import android.content.ContentResolver
 import androidx.compose.material3.OutlinedTextField
-import com.aazhou.mtforum.ui.common.MtfContentDialog
+import com.aazhou.lxforum.ui.common.MtfContentDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -117,21 +117,21 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
-import com.aazhou.mtforum.data.repo.QuickReplyStore
-import com.aazhou.mtforum.ui.common.MtfConfirmDialog
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.EditAttachment
-import com.aazhou.mtforum.data.model.Post
-import com.aazhou.mtforum.data.parser.Smiley
-import com.aazhou.mtforum.data.parser.SmileyPack
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.ImagePreview
-import com.aazhou.mtforum.ui.common.awaitImeSettled
-import com.aazhou.mtforum.ui.theme.DarkBrightTextAlpha
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
-import com.aazhou.mtforum.ui.theme.dimImageInDark
+import com.aazhou.lxforum.data.repo.QuickReplyStore
+import com.aazhou.lxforum.ui.common.MtfConfirmDialog
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.EditAttachment
+import com.aazhou.lxforum.data.model.Post
+import com.aazhou.lxforum.data.parser.Smiley
+import com.aazhou.lxforum.data.parser.SmileyPack
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.ImagePreview
+import com.aazhou.lxforum.ui.common.awaitImeSettled
+import com.aazhou.lxforum.ui.theme.DarkBrightTextAlpha
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.ui.theme.dimImageInDark
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -932,7 +932,7 @@ internal fun ReplyComposer(
 
         
         quickDeleteTarget?.let { target ->
-            com.aazhou.mtforum.ui.common.MtfConfirmDialog(
+            com.aazhou.lxforum.ui.common.MtfConfirmDialog(
                 title = "删除短语",
                 message = "确定删除「$target」吗？",
                 confirmText = "删除",
@@ -998,7 +998,7 @@ private fun smileyRangesOf(text: String, smileyByCode: Map<String, Smiley>): Lis
 internal fun formatRichComposerText(
     source: String,
     smileyByCode: Map<String, Smiley>,
-    colors: com.aazhou.mtforum.ui.theme.MtfColors,
+    colors: com.aazhou.lxforum.ui.theme.MtfColors,
     primaryColor: Color,
 ): AnnotatedString {
     return buildAnnotatedString {

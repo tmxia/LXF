@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.data.log
+package com.aazhou.lxforum.data.log
 
 import android.util.Log as AndroidLog
 import kotlinx.coroutines.CoroutineScope

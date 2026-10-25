@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.nav
+package com.aazhou.lxforum.ui.nav
 
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -36,9 +36,9 @@ import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastCoerceIn
-import com.aazhou.mtforum.ui.common.BottomBarBottomMargin
-import com.aazhou.mtforum.ui.common.BottomBarHeight
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.common.BottomBarBottomMargin
+import com.aazhou.lxforum.ui.common.BottomBarHeight
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
 import com.kyant.backdrop.backdrops.LayerBackdrop
 import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur

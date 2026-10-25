@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.aazhou.mtforum.data.model.NoticeTab
+import com.aazhou.lxforum.data.model.NoticeTab
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

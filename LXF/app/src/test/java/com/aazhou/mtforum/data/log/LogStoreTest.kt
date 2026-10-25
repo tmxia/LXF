@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.data.log
+package com.aazhou.lxforum.data.log
 
 import java.nio.file.Files
 import kotlinx.coroutines.runBlocking

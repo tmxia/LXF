@@ -1,9 +1,9 @@
-package com.aazhou.mtforum.ui.screen.threaddetail
+package com.aazhou.lxforum.ui.screen.threaddetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aazhou.mtforum.data.model.AtUser
-import com.aazhou.mtforum.data.repo.ForumRepository
+import com.aazhou.lxforum.data.model.AtUser
+import com.aazhou.lxforum.data.repo.ForumRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

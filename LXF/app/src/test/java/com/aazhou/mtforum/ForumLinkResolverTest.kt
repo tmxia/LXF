@@ -1,6 +1,6 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.ui.common.ForumLinkResolver
+import com.aazhou.lxforum.ui.common.ForumLinkResolver
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

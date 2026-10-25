@@ -1,10 +1,10 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.aazhou.mtforum.data.model.HistoryItem
+import com.aazhou.lxforum.data.model.HistoryItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.json.JSONArray

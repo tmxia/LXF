@@ -1,12 +1,12 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import com.aazhou.mtforum.ui.common.ContentBlock
-import com.aazhou.mtforum.ui.common.StyleSpan
-import com.aazhou.mtforum.ui.common.buildBodyText
-import com.aazhou.mtforum.ui.common.parseContentBlocks
+import com.aazhou.lxforum.ui.common.ContentBlock
+import com.aazhou.lxforum.ui.common.StyleSpan
+import com.aazhou.lxforum.ui.common.buildBodyText
+import com.aazhou.lxforum.ui.common.parseContentBlocks
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -31,12 +31,12 @@ class HtmlContentTest {
         // 表情也要下载（离线完整），但必须打上 smiley class，CSS 才能把它限成行内小图；
         // smilieid 要保留，应用内渲染才认得出它是表情
         val html = "<img src=\"https://cdn.binmt.cc/static/image/smiley/doge/7.png\" smilieid=\"1359\" />"
-        val out = com.aazhou.mtforum.data.export.sanitizeContentHtml(html) { "file:///x.jpg" }
+        val out = com.aazhou.lxforum.data.export.sanitizeContentHtml(html) { "file:///x.jpg" }
         assertTrue("应打上 smiley class: $out", out.contains("class=\"smiley\""))
         assertTrue("应保留 smilieid: $out", out.contains("smilieid=\"1\""))
         assertTrue("src 应改写成本地地址: $out", out.contains("src=\"file:///x.jpg\""))
         // 普通配图不带 smiley class
-        val plain = com.aazhou.mtforum.data.export.sanitizeContentHtml(
+        val plain = com.aazhou.lxforum.data.export.sanitizeContentHtml(
             "<img src=\"https://cdn.binmt.cc/data/attachment/forum/x.png\" />",
         ) { "file:///y.jpg" }
         assertTrue("普通配图不应有 smiley class: $plain", !plain.contains("smiley"))
@@ -45,11 +45,11 @@ class HtmlContentTest {
     @Test
     fun localFileImageStaysLocalAddress() {
         // 已下载帖子的离线图：src 是 file:// 本地地址，不能拼成站点域名
-        val html = "<img src=\"file:///data/user/0/com.aazhou.mtforum/files/thread_downloads/174181/images/abc.jpg\" />"
+        val html = "<img src=\"file:///data/user/0/com.aazhou.lxforum/files/thread_downloads/174181/images/abc.jpg\" />"
         val blocks = parseContentBlocks(html)
         val image = blocks.filterIsInstance<ContentBlock.Image>().single()
         assertEquals(
-            "file:///data/user/0/com.aazhou.mtforum/files/thread_downloads/174181/images/abc.jpg",
+            "file:///data/user/0/com.aazhou.lxforum/files/thread_downloads/174181/images/abc.jpg",
             image.url,
         )
     }
@@ -752,7 +752,7 @@ class HtmlContentTest {
             "<img src=\"https://cdn.binmt.cc/data/attachment/forum/p.jpg\" /></div>"
         assertEquals(
             listOf("https://cdn.binmt.cc/data/attachment/forum/p.jpg"),
-            com.aazhou.mtforum.ui.common.collectImageUrls(html),
+            com.aazhou.lxforum.ui.common.collectImageUrls(html),
         )
     }
 
@@ -761,7 +761,7 @@ class HtmlContentTest {
         // 复制正文取纯文本时隐藏内容也要在，不能整块丢
         val html = "正文<div class=\"comiis_quote bg_h f_c\"><h2 class=\"f_a\">本帖隐藏的内容: </h2>" +
             "https://github.com/aaazhouaa/MTF</div>"
-        val text = com.aazhou.mtforum.ui.common.plainTextOf(html)
+        val text = com.aazhou.lxforum.ui.common.plainTextOf(html)
         assertTrue(text.contains("正文"))
         assertTrue(text.contains("https://github.com/aaazhouaa/MTF"))
     }

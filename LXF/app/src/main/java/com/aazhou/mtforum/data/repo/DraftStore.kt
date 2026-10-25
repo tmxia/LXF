@@ -1,6 +1,6 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
-import com.aazhou.mtforum.data.model.PostDraft
+import com.aazhou.lxforum.data.model.PostDraft
 import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

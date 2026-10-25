@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.image
+package com.aazhou.lxforum.image
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

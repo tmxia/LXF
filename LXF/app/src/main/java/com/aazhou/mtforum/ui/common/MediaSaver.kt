@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.common
+package com.aazhou.lxforum.ui.common
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,8 +7,8 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
-import com.aazhou.mtforum.data.network.HttpClient
-import com.aazhou.mtforum.image.forumMediaClient
+import com.aazhou.lxforum.data.network.HttpClient
+import com.aazhou.lxforum.image.forumMediaClient
 import okhttp3.Request
 import java.io.File
 import kotlinx.coroutines.CoroutineScope

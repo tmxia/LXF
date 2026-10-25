@@ -1,10 +1,10 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
 import android.app.Application
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import com.aazhou.mtforum.data.network.HttpClient
-import com.aazhou.mtforum.image.MtfImageLoaderFactory
+import com.aazhou.lxforum.data.network.HttpClient
+import com.aazhou.lxforum.image.MtfImageLoaderFactory
 
 class MtfApp : Application(), ImageLoaderFactory {
 

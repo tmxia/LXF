@@ -1,15 +1,15 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.TextUnit
-import com.aazhou.mtforum.data.parser.Smiley
-import com.aazhou.mtforum.ui.screen.threaddetail.formatRichComposerText
-import com.aazhou.mtforum.ui.screen.threaddetail.smileySlotSpacing
-import com.aazhou.mtforum.ui.screen.threaddetail.snapSelectionOutOfSmiley
-import com.aazhou.mtforum.ui.theme.LightMtfColors
+import com.aazhou.lxforum.data.parser.Smiley
+import com.aazhou.lxforum.ui.screen.threaddetail.formatRichComposerText
+import com.aazhou.lxforum.ui.screen.threaddetail.smileySlotSpacing
+import com.aazhou.lxforum.ui.screen.threaddetail.snapSelectionOutOfSmiley
+import com.aazhou.lxforum.ui.theme.LightMtfColors
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

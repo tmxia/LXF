@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.notice
+package com.aazhou.lxforum.ui.screen.notice
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -50,23 +50,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.aazhou.mtforum.NoticeNotifier
-import com.aazhou.mtforum.NoticePollWorker
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.NoticeGroup
-import com.aazhou.mtforum.data.repo.NoticeRepo
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.MtfSwitchRow
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.common.bottomBarContentPadding
-import com.aazhou.mtforum.ui.common.container
-import com.aazhou.mtforum.ui.common.onDoubleTapToTop
-import com.aazhou.mtforum.ui.common.scrollToTop
-import com.aazhou.mtforum.ui.screen.login.LoginDialog
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.NoticeNotifier
+import com.aazhou.lxforum.NoticePollWorker
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.NoticeGroup
+import com.aazhou.lxforum.data.repo.NoticeRepo
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.MtfSwitchRow
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.bottomBarContentPadding
+import com.aazhou.lxforum.ui.common.container
+import com.aazhou.lxforum.ui.common.onDoubleTapToTop
+import com.aazhou.lxforum.ui.common.scrollToTop
+import com.aazhou.lxforum.ui.screen.login.LoginDialog
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
 import kotlinx.coroutines.launch
 
 

@@ -1,6 +1,6 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.data.model.BACKGROUND_TABS
+import com.aazhou.lxforum.data.model.BACKGROUND_TABS
 import android.content.Context
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints

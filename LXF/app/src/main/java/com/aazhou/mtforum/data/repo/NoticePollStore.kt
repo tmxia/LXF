@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey

@@ -1,9 +1,9 @@
-package com.aazhou.mtforum.ui.common
+package com.aazhou.lxforum.ui.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
 
 
 

@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.data.platform
+package com.aazhou.lxforum.data.platform
 
 import android.os.Build
 

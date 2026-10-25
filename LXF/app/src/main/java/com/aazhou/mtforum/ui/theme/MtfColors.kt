@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.theme
+package com.aazhou.lxforum.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf

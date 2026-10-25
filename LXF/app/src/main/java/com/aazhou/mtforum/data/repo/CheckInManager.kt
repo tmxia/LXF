@@ -1,8 +1,8 @@
-package com.aazhou.mtforum.data.repo
+package com.aazhou.lxforum.data.repo
 
-import com.aazhou.mtforum.data.model.UserProfile
-import com.aazhou.mtforum.data.network.HttpClient
-import com.aazhou.mtforum.ui.common.AppToast
+import com.aazhou.lxforum.data.model.UserProfile
+import com.aazhou.lxforum.data.network.HttpClient
+import com.aazhou.lxforum.ui.common.AppToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

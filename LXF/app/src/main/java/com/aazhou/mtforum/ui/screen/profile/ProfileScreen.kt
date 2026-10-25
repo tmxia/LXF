@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.profile
+package com.aazhou.lxforum.ui.screen.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -46,20 +46,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.UserProfile
-import com.aazhou.mtforum.image.smallImageRequest
-import com.aazhou.mtforum.ui.common.TabSecondaryActionIcons
-import com.aazhou.mtforum.ui.common.TopBarActionsEndPadding
-import com.aazhou.mtforum.ui.common.TopBarVerticalPadding
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.common.bottomBarContentPadding
-import com.aazhou.mtforum.ui.common.container
-import com.aazhou.mtforum.ui.screen.login.LoginDialog
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
-import com.aazhou.mtforum.ui.theme.dimImageInDark
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.UserProfile
+import com.aazhou.lxforum.image.smallImageRequest
+import com.aazhou.lxforum.ui.common.TabSecondaryActionIcons
+import com.aazhou.lxforum.ui.common.TopBarActionsEndPadding
+import com.aazhou.lxforum.ui.common.TopBarVerticalPadding
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.bottomBarContentPadding
+import com.aazhou.lxforum.ui.common.container
+import com.aazhou.lxforum.ui.screen.login.LoginDialog
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.ui.theme.dimImageInDark
 
 @Composable
 fun ProfileScreen(

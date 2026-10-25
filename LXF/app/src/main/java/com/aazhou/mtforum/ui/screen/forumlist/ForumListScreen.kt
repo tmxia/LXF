@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.forumlist
+package com.aazhou.lxforum.ui.screen.forumlist
 
 import androidx.compose.foundation.background
 import androidx.compose.ui.platform.LocalContext
@@ -49,25 +49,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.aazhou.mtforum.R
-import com.aazhou.mtforum.data.model.Forum
-import com.aazhou.mtforum.data.model.ForumGroup
-import com.aazhou.mtforum.image.smallImageRequest
-import com.aazhou.mtforum.ui.common.ErrorBox
-import com.aazhou.mtforum.ui.common.LoadingBox
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.ui.common.TabSecondaryActionIcons
-import com.aazhou.mtforum.ui.common.TopBarActionsEndPadding
-import com.aazhou.mtforum.ui.common.UiState
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.bottomBarContentPadding
-import com.aazhou.mtforum.ui.common.onDoubleTapToTop
-import com.aazhou.mtforum.ui.common.scrollToNewest
-import com.aazhou.mtforum.ui.common.scrollToTop
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.R
+import com.aazhou.lxforum.data.model.Forum
+import com.aazhou.lxforum.data.model.ForumGroup
+import com.aazhou.lxforum.image.smallImageRequest
+import com.aazhou.lxforum.ui.common.ErrorBox
+import com.aazhou.lxforum.ui.common.LoadingBox
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.ui.common.TabSecondaryActionIcons
+import com.aazhou.lxforum.ui.common.TopBarActionsEndPadding
+import com.aazhou.lxforum.ui.common.UiState
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.bottomBarContentPadding
+import com.aazhou.lxforum.ui.common.onDoubleTapToTop
+import com.aazhou.lxforum.ui.common.scrollToNewest
+import com.aazhou.lxforum.ui.common.scrollToTop
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.bodyTextColor
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

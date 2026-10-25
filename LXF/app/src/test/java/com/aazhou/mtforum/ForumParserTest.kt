@@ -1,9 +1,9 @@
-package com.aazhou.mtforum
+package com.aazhou.lxforum
 
-import com.aazhou.mtforum.data.parser.ForumParser
-import com.aazhou.mtforum.ui.common.ContentBlock
-import com.aazhou.mtforum.ui.common.collectImageUrls
-import com.aazhou.mtforum.ui.common.parseContentBlocks
+import com.aazhou.lxforum.data.parser.ForumParser
+import com.aazhou.lxforum.ui.common.ContentBlock
+import com.aazhou.lxforum.ui.common.collectImageUrls
+import com.aazhou.lxforum.ui.common.parseContentBlocks
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue

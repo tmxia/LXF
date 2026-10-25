@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.login
+package com.aazhou.lxforum.ui.screen.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,8 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.aazhou.mtforum.ui.common.MtfTopBarHeight
-import com.aazhou.mtforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.MtfTopBarHeight
+import com.aazhou.lxforum.ui.common.appViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +57,7 @@ fun LoginScreen(onBack: () -> Unit, onSuccess: () -> Unit) {
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
-                            painterResource(com.aazhou.mtforum.R.drawable.ic_back),
+                            painterResource(com.aazhou.lxforum.R.drawable.ic_back),
                             contentDescription = "返回",
                         )
                     }

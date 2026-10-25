@@ -1,6 +1,6 @@
-package com.aazhou.mtforum.data.parser
+package com.aazhou.lxforum.data.parser
 
-import com.aazhou.mtforum.data.model.AtUser
+import com.aazhou.lxforum.data.model.AtUser
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

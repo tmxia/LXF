@@ -1,4 +1,4 @@
-package com.aazhou.mtforum.ui.screen.home
+package com.aazhou.lxforum.ui.screen.home
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -58,33 +58,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.aazhou.mtforum.data.model.Thread
-import com.aazhou.mtforum.image.smallImageRequest
-import com.aazhou.mtforum.ui.common.AppToast
-import com.aazhou.mtforum.ui.common.ErrorBox
-import com.aazhou.mtforum.ui.common.ImagePreview
-import com.aazhou.mtforum.ui.common.LoadingBox
-import com.aazhou.mtforum.ui.common.RankCard
-import com.aazhou.mtforum.ui.common.RankCollapsedLimit
-import com.aazhou.mtforum.ui.common.ThreadCard
-import com.aazhou.mtforum.ui.common.UiState
-import com.aazhou.mtforum.ui.common.accountIconModel
-import com.aazhou.mtforum.ui.common.appViewModel
-import com.aazhou.mtforum.ui.common.bottomBarContentPadding
-import com.aazhou.mtforum.ui.common.container
-import com.aazhou.mtforum.ui.common.scrollToNewest
-import com.aazhou.mtforum.ui.common.reportViewportAtTop
-import com.aazhou.mtforum.ui.common.scrollToTop
-import com.aazhou.mtforum.ui.common.TopBarActionIcons
-import com.aazhou.mtforum.ui.common.TopBarActionsEndPadding
-import com.aazhou.mtforum.ui.common.TopBarVerticalPadding
-import com.aazhou.mtforum.ui.common.onDoubleTapToTop
-import com.aazhou.mtforum.ui.screen.login.LoginDialog
-import com.aazhou.mtforum.ui.theme.LocalIsDarkTheme
-import com.aazhou.mtforum.ui.theme.LocalMtfColors
-import com.aazhou.mtforum.ui.theme.accentTextColor
-import com.aazhou.mtforum.ui.theme.bodyTextColor
-import com.aazhou.mtforum.ui.theme.dimImageInDark
+import com.aazhou.lxforum.data.model.Thread
+import com.aazhou.lxforum.image.smallImageRequest
+import com.aazhou.lxforum.ui.common.AppToast
+import com.aazhou.lxforum.ui.common.ErrorBox
+import com.aazhou.lxforum.ui.common.ImagePreview
+import com.aazhou.lxforum.ui.common.LoadingBox
+import com.aazhou.lxforum.ui.common.RankCard
+import com.aazhou.lxforum.ui.common.RankCollapsedLimit
+import com.aazhou.lxforum.ui.common.ThreadCard
+import com.aazhou.lxforum.ui.common.UiState
+import com.aazhou.lxforum.ui.common.accountIconModel
+import com.aazhou.lxforum.ui.common.appViewModel
+import com.aazhou.lxforum.ui.common.bottomBarContentPadding
+import com.aazhou.lxforum.ui.common.container
+import com.aazhou.lxforum.ui.common.scrollToNewest
+import com.aazhou.lxforum.ui.common.reportViewportAtTop
+import com.aazhou.lxforum.ui.common.scrollToTop
+import com.aazhou.lxforum.ui.common.TopBarActionIcons
+import com.aazhou.lxforum.ui.common.TopBarActionsEndPadding
+import com.aazhou.lxforum.ui.common.TopBarVerticalPadding
+import com.aazhou.lxforum.ui.common.onDoubleTapToTop
+import com.aazhou.lxforum.ui.screen.login.LoginDialog
+import com.aazhou.lxforum.ui.theme.LocalIsDarkTheme
+import com.aazhou.lxforum.ui.theme.LocalMtfColors
+import com.aazhou.lxforum.ui.theme.accentTextColor
+import com.aazhou.lxforum.ui.theme.bodyTextColor
+import com.aazhou.lxforum.ui.theme.dimImageInDark
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.filter
 
@@ -282,7 +282,7 @@ private fun FeedPage(
 
     
     blockTarget?.let { target ->
-        com.aazhou.mtforum.ui.common.BlockUserDialog(
+        com.aazhou.lxforum.ui.common.BlockUserDialog(
             targetName = target.authorName ?: "该用户",
             isBlock = true,
             onDismiss = { blockTarget = null },
@@ -511,7 +511,7 @@ private fun HomeTopBar(
                 .padding(horizontal = 12.dp),
         ) {
             Icon(
-                painterResource(com.aazhou.mtforum.R.drawable.ic_search_new),
+                painterResource(com.aazhou.lxforum.R.drawable.ic_search_new),
                 contentDescription = null,
                 tint = colors.textHint,
                 modifier = Modifier.size(16.dp),

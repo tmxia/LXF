@@ -1,7 +1,7 @@
-package com.aazhou.mtforum.image
+package com.aazhou.lxforum.image
 
-import com.aazhou.mtforum.data.network.CDN_IP_RATE_LIMITED
-import com.aazhou.mtforum.data.network.RateLimiter
+import com.aazhou.lxforum.data.network.CDN_IP_RATE_LIMITED
+import com.aazhou.lxforum.data.network.RateLimiter
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType

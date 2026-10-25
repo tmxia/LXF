@@ -1,6 +1,6 @@
-package com.aazhou.mtforum.data.network
+package com.aazhou.lxforum.data.network
 
-import com.aazhou.mtforum.data.log.LogLevel
+import com.aazhou.lxforum.data.log.LogLevel
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
