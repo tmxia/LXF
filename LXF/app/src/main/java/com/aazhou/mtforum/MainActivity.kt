@@ -1,4 +1,12 @@
 package com.aazhou.mtforum
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.background
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.ChatBubbleOutline
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.material3.Surface
+import java.nio.charset.Charset
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -78,7 +86,7 @@ fun LxForumScreen(onThreadClick: (String) -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("理想论坛 · 本地全量版", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp) },
+                title = { Text("理想论坛 · 本地全量版", color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 18.sp) },
                 actions = {
                     if (isDownloading) {
                         CircularProgressIndicator(modifier = Modifier.size(24.dp).padding(end = 16.dp), color = Color.White, strokeWidth = 2.dp)
@@ -125,28 +133,77 @@ fun ThreadCard(thread: LxThread, onClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        shape = RoundedCornerShape(8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        shape = RoundedCornerShape(12.dp)
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Row(verticalAlignment = Alignment.Top) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            // 第一行：头像、作者、时间、右侧标签
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                // 模拟圆形头像 (取作者名字第一个字)
+                Box(
+                    modifier = Modifier.size(36.dp).clip(CircleShape).background(Color(0xFFE0F2F1)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (thread.author.isNotEmpty()) thread.author.take(1) else "匿",
+                        fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF00897B)
+                    )
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = thread.author, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = Color(0xFF333333))
+                    Text(text = thread.time, fontSize = 11.sp, color = Color(0xFF999999))
+                }
+                
+                // 右侧标签
                 if (thread.tag.isNotBlank()) {
-                    Text(text = "[${thread.tag}] ", color = Color(0xFF1976D2), fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = Color(0xFFF5F5F5),
+                        border = BorderStroke(1.dp, Color(0xFFEEEEEE))
+                    ) {
+                        Text(
+                            text = thread.tag,
+                            fontSize = 11.sp,
+                            color = Color(0xFF666666),
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
                 }
-                Text(text = thread.title, fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color(0xFF222222), lineHeight = 20.sp, modifier = Modifier.weight(1f))
             }
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Row {
-                    Text(text = thread.author, fontSize = 12.sp, color = Color(0xFF666666))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = thread.time, fontSize = 12.sp, color = Color(0xFF999999))
-                }
-                Row {
-                    Text(text = "查看: ${thread.viewCount}", fontSize = 12.sp, color = Color(0xFF999999))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "回复: ${thread.replyCount}", fontSize = 12.sp, color = Color(0xFF999999))
-                }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            // 第二行：帖子标题
+            Text(
+                text = thread.title,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF222222),
+                lineHeight = 22.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            
+            // 第三行：摘要占位
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = "点击查看帖子详情与讨论内容...",
+                fontSize = 13.sp,
+                color = Color(0xFF888888),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            // 第四行：底部互动数据图标
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(imageVector = Icons.Outlined.Visibility, contentDescription = null, tint = Color(0xFF999999), modifier = Modifier.size(16.dp))
+                Text(text = " ${thread.viewCount}", fontSize = 12.sp, color = Color(0xFF999999))
+                Spacer(modifier = Modifier.width(16.dp))
+                Icon(imageVector = Icons.Outlined.ChatBubbleOutline, contentDescription = null, tint = Color(0xFF999999), modifier = Modifier.size(16.dp))
+                Text(text = " ${thread.replyCount}", fontSize = 12.sp, color = Color(0xFF999999))
             }
         }
     }
@@ -177,7 +234,7 @@ fun LxDetailScreen(tid: String, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("帖子详情", color = Color.White, fontWeight = FontWeight.Bold) },
+                title = { Text("帖子详情", color = Color.White, fontWeight = FontWeight.SemiBold) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回", tint = Color.White)
@@ -199,7 +256,7 @@ fun LxDetailScreen(tid: String, onBack: () -> Unit) {
                     .verticalScroll(scrollState)
                     .padding(16.dp)
             ) {
-                Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(text = content, fontSize = 15.sp, color = Color.DarkGray, lineHeight = 24.sp)
             }
