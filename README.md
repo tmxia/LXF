@@ -2,3 +2,4 @@
 fix AAPT resource
 Independent LXF build
 Fix crash
+Native test
