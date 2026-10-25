@@ -1050,6 +1050,11 @@ class ForumRepository(
         questionId: Int = 0,
         answer: String = "",
     ): LoginResult = withContext(Dispatchers.IO) {
+        // 🚨 [LXF 拦截] 此处需要接入 passport.55188.com 的 POST 登录接口
+        // 注意：55188 登录需要图片验证码 (validate 字段)
+        android.util.Log.d("LXF", "尝试登录，需在 UI 层配合验证码输入")
+        // TODO: 这里需要你根据 MTF 的 LoginUiState 返回相应的错误或成功状态
+
         val loginPage = http.get(http.url("member.php?mod=logging&action=login&mobile=2"))
         val loginhash = ForumParser.extractLoginHash(loginPage)
         val formhash = ForumParser.extractLoginFormhash(loginPage) ?: ""
