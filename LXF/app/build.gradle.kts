@@ -62,6 +62,10 @@ android {
     }
 
     
+    
+    }
+    
+    
     applicationVariants.all {
         outputs.all {
             if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {

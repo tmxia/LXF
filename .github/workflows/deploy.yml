@@ -1,4 +1,4 @@
-# MTF 自动构建 APK + Release 发布
+# LXF 自动构建 APK + Release 发布
 # 触发：push 到 main / master，或手动触发
 # Secrets（可选）：
 #   RELEASE_KEYSTORE_BASE64  release.keystore 的 base64
@@ -69,14 +69,14 @@ jobs:
             echo "⚠️  未配置签名 Secrets，生成临时 keystore"
             keytool -genkeypair -v \
               -keystore "$KS" \
-              -alias mtf \
+              -alias lxf \
               -keyalg RSA -keysize 2048 -validity 10000 \
-              -storepass mtf-ci -keypass mtf-ci \
-              -dname "CN=MTF CI, OU=Build, O=CI, C=CN" \
+              -storepass lxf-ci -keypass lxf-ci \
+              -dname "CN=LXF CI, OU=Build, O=CI, C=CN" \
               -noprompt
-            echo "STORE_PASS=mtf-ci" >> $GITHUB_ENV
-            echo "KEY_ALIAS=mtf"     >> $GITHUB_ENV
-            echo "KEY_PASS=mtf-ci"   >> $GITHUB_ENV
+            echo "STORE_PASS=lxf-ci" >> $GITHUB_ENV
+            echo "KEY_ALIAS=lxf"     >> $GITHUB_ENV
+            echo "KEY_PASS=lxf-ci"   >> $GITHUB_ENV
           fi
           echo "KEYSTORE_PATH=$KS" >> $GITHUB_ENV
 
@@ -113,7 +113,7 @@ jobs:
         run: |
           SRC=$(find app/build/outputs/apk/release -name "*.apk" -not -name "*unsigned*" | head -1)
           [ -z "$SRC" ] && SRC=app/build/outputs/apk/release/app-release-unsigned.apk
-          DST="mtf-v${{ steps.ver.outputs.name }}.apk"
+          DST="lxf-v${{ steps.ver.outputs.name }}.apk"
           cp "$SRC" "$DST"
           echo "name=$DST" >> $GITHUB_OUTPUT
           ls -lh "$DST"
@@ -127,7 +127,7 @@ jobs:
           gh release delete "$TAG" --yes 2>/dev/null || true
           git push origin --delete "$TAG" 2>/dev/null || true
           gh release create "$TAG" \
-            --title "MTF $TAG" \
+            --title "LXF $TAG" \
             --notes "**自动构建**
           - versionName: \`${{ steps.ver.outputs.name }}\`
           - versionCode: \`${{ steps.ver.outputs.code }}\`
