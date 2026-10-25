@@ -9,7 +9,6 @@ import org.jsoup.Jsoup
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
-import kotlin.random.Random
 
 object LxfParser {
     private const val UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -48,11 +47,7 @@ object LxfParser {
                             Thread(
                                 tid = tid,
                                 subject = titleText,
-                                authorName = author,
-                                // 随机填入浏览量和回复数，让UI更好看
-                                views = Random.nextInt(100, 5000),
-                                replies = Random.nextInt(0, 100),
-                                dateline = "刚刚"
+                                authorName = author
                             )
                         )
                     }
@@ -65,7 +60,6 @@ object LxfParser {
         threads
     }
 
-    // 抓取详情页真实内容并组装成 MTF 的 ThreadPage 格式
     suspend fun fetchThreadDetail(tid: String): ThreadPage = withContext(Dispatchers.IO) {
         try {
             val url = URL("https://www.55188.com/thread-$tid-1-1.html")
@@ -76,10 +70,7 @@ object LxfParser {
             val html = String(conn.inputStream.readBytes(), Charset.forName("GBK"))
             val doc = Jsoup.parse(html)
             
-            // 提取帖子标题
             val title = doc.select("title").text().replace(" - 理想论坛", "").trim()
-            
-            // 提取主楼内容 (Discuz 通常是 td.t_f 或者 class 包含 message 的 div)
             val postContent = doc.select("td.t_f").firstOrNull()?.html() ?: "无法解析内容或需要登录查看"
             val cleanContent = postContent.replace("<br>", "\n").replace(Regex("<[^>]*>"), "")
             
@@ -87,23 +78,19 @@ object LxfParser {
                 pid = "post_$tid", 
                 tid = tid, 
                 authorName = "理想股友", 
-                message = cleanContent, 
-                dateline = "刚刚", 
-                subject = title
+                message = cleanContent 
             )
             
-            // 组装 ThreadPage (如果你 MTF 的字段不一致，编译报错时告诉我)
             ThreadPage(
-                thread = Thread(tid = tid, subject = title, authorName = "理想股友"),
+                thread = Thread(tid = tid, subject = title),
                 posts = listOf(fakePost),
                 page = 1, 
                 hasNext = false
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            // 如果报错，返回一个兜底数据防止崩溃
             ThreadPage(
-                thread = Thread(tid = tid, subject = "加载失败", authorName = "系统"),
+                thread = Thread(tid = tid, subject = "加载失败"),
                 posts = emptyList(),
                 page = 1, 
                 hasNext = false

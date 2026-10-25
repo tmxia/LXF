@@ -55,14 +55,14 @@ data class ForumPage(
 
 @Serializable
 data class ThreadPage(
-    val tid: String,
-    val subject: String?,
-    val forumName: String?,
-    val posts: List<Post>,
-    val page: Int,
-    val totalPages: Int,
-    val formhash: String?,
-    val replyUrl: String?,
+    val tid: String = "",
+    val subject: String? = "",
+    val forumName: String? = "",
+    val posts: List<Post> = emptyList(),
+    val page: Int = 0,
+    val totalPages: Int = 0,
+    val formhash: String? = "",
+    val replyUrl: String? = "",
     
     val noticeAuthor: String? = null,
     val fid: String? = null,
@@ -94,8 +94,8 @@ data class ThreadPage(
 
 @Serializable
 data class Post(
-    val pid: String,
-    val authorName: String,
+    val pid: String = "",
+    val authorName: String = "",
     val authorUid: String? = null,
     val avatarUrl: String? = null,
     val level: String? = null,
