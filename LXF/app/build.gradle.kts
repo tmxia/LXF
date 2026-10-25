@@ -61,19 +61,6 @@ android {
         }
     }
 
-    
-    
-    }
-    
-    
-    applicationVariants.all {
-        outputs.all {
-            if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
-                outputFileName = "LXF-${name}-${versionName}.apk"
-            }
-        }
-    }
-    
     buildTypes {
         release {
             // 优先用正式签名（仓库外 .secrets/mtf/keystore.properties），缺失时回退 debug 签名
@@ -110,7 +97,6 @@ kotlin {
 }
 
 dependencies {
-    implementation("org.jsoup:jsoup:1.17.2")
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
