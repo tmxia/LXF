@@ -9,17 +9,29 @@ object LxParser {
         val threads = mutableListOf<LxThread>()
         val uniqueTids = mutableSetOf<String>()
 
-        // 匹配所有 thread-xxxxx-1-1.html 格式的链接
+        // 找到所有包含 thread- 的 a 标签
         val elements = doc.select("a[href^=thread-]")
         for (el in elements) {
             val href = el.attr("href")
             val title = el.text().trim()
+            
             if (title.isNotEmpty() && !title.contains("thread-") && title.length > 3) {
                 try {
                     val tid = href.substringAfter("thread-").substringBefore("-")
                     if (uniqueTids.add(tid)) {
-                        // 尝试在附近找作者，找不到就填未知
-                        val author = el.parent()?.parent()?.select("a[href^=space-uid]")?.text() ?: "未知"
+                        // 核心修复：向上寻找包含作者信息的容器
+                        // Discuz 的帖子列表通常有 tbody[id^=normalthread] 或类似的包裹结构
+                        var author = "未知"
+                        
+                        // 尝试在当前链接的父级、祖父级中寻找指向用户空间(space-uid)的链接
+                        val container = el.parent()?.parent()
+                        if (container != null) {
+                            val authorEl = container.selectFirst("a[href*='space-uid'], cite a")
+                            if (authorEl != null) {
+                                author = authorEl.text().trim()
+                            }
+                        }
+
                         threads.add(
                             LxThread(
                                 tid = tid,
