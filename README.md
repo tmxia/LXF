@@ -4,3 +4,4 @@ Independent LXF build
 Fix crash
 Native test
 Compose test
+Theme test
