@@ -102,7 +102,7 @@ fun LoginDialog(
 
     MtfContentDialog(
         title = "账号登录",
-        subtitle = "登录 MT论坛 畅享更多功能",
+        subtitle = "登录 理想论坛 畅享更多功能",
         onDismissRequest = onDismiss,
     ) {
         
