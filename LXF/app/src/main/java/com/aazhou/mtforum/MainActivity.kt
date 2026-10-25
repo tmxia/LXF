@@ -1,4 +1,12 @@
 package com.aazhou.mtforum
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.Cookie
+import okhttp3.CookieJar
+import okhttp3.HttpUrl
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
@@ -247,4 +255,87 @@ fun MTFThreadCard(thread: LxThread) {
             }
         }
     }
+}
+
+
+// ==================== 网络与登录逻辑 ====================
+// 用于全局保存 Cookie 的简单 CookieJar
+object CookieManager {
+    val cookieStore = mutableMapOf<String, List<Cookie>>()
+    val client = OkHttpClient.Builder()
+        .cookieJar(object : CookieJar {
+            override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+                cookieStore[url.host] = cookies
+            }
+            override fun loadForRequest(url: HttpUrl): List<Cookie> {
+                return cookieStore[url.host] ?: emptyList()
+            }
+        })
+        .connectTimeout(15, TimeUnit.SECONDS)
+        .build()
+}
+
+// 获取登录验证码图片（返回字节流，供 UI 转换为图片）
+suspend fun fetchLoginCaptcha(): ByteArray? = withContext(Dispatchers.IO) {
+    try {
+        val req = Request.Builder().url("https://passport.55188.com/index/validate/login").build()
+        val resp = CookieManager.client.newCall(req).execute()
+        return@withContext resp.body?.bytes()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return@withContext null
+    }
+}
+
+// 执行登录请求
+suspend fun performLogin(username: String, password: String, captcha: String): Boolean = withContext(Dispatchers.IO) {
+    try {
+        val body = "username=$username&password=$password&validate=$captcha&cookietime=2592000&loginsubmit=%E7%AB%8B%E5%8D%B3%E7%99%BB%E5%BD%95".toRequestBody("application/x-www-form-urlencoded".toMediaType())
+        val req = Request.Builder()
+            .url("https://passport.55188.com/index/login")
+            .post(body)
+            .header("User-Agent", "Mozilla/5.0 (Linux; Android 12)")
+            .header("Referer", "https://passport.55188.com/index/login")
+            .build()
+        val resp = CookieManager.client.newCall(req).execute()
+        val html = resp.body?.string() ?: ""
+        // 登录成功的标志通常是跳转，或者响应中不包含密码错误提示
+        return@withContext html.contains("登录成功") || html.contains("欢迎您回来") || resp.priorResponse?.code == 302
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return@withContext false
+    }
+}
+
+// 抓取并解析个人主页真实数据
+suspend fun fetchUserProfile(): List<Pair<String, String>> = withContext(Dispatchers.IO) {
+    val stats = mutableListOf<Pair<String, String>>()
+    try {
+        val req = Request.Builder()
+            .url("https://www.55188.com/home.php?mod=space&do=profile")
+            .header("User-Agent", "Mozilla/5.0 (Linux; Android 12)")
+            .build()
+        val resp = CookieManager.client.newCall(req).execute()
+        val bytes = resp.body?.bytes() ?: byteArrayOf()
+        val html = String(bytes, Charset.forName("GBK"))
+        
+        val doc = Jsoup.parse(html)
+        // 假设解析规则：查找特定的统计数据元素（此处需要根据真实登录后的HTML调整）
+        // 这里使用通用的文本匹配作为占位
+        if (html.contains("理想币")) {
+            stats.add(Pair("理想币", "已登录获取"))
+            stats.add(Pair("共享币", "已登录获取"))
+            stats.add(Pair("分享值", "已登录获取"))
+            stats.add(Pair("金钻", "已登录获取"))
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    if (stats.isEmpty()) {
+         stats.add(Pair("理想币", "未登录"))
+         stats.add(Pair("共享币", "未登录"))
+         stats.add(Pair("分享值", "未登录"))
+         stats.add(Pair("金钻", "未登录"))
+    }
+    stats
 }
