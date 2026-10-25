@@ -69,10 +69,10 @@ object LxfParser {
             val fakePost = Post(
                 pid = "pid_" + tid,
                 authorName = "理想股友",
-                authorUid = "理想股友",
+                authorUid = null,
                 avatarUrl = null,
                 level = null,
-                timeText = cleanContent,
+                timeText = null,
                 location = null,
                 contentHtml = cleanContent,
                 isOp = false,
@@ -80,8 +80,8 @@ object LxfParser {
                 floor = null,
                 floorLabel = null,
                 quote = null,
-                editedText = cleanContent,
-                hasHiddenContent = cleanContent,
+                editedText = null,
+                hasHiddenContent = false,
                 sticky = false
             )
             
