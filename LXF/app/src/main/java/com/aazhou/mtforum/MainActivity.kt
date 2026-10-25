@@ -59,9 +59,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
-                MTFApp()
+            androidx.compose.material3.MaterialTheme {
+                com.aazhou.mtforum.ui.lxf.LxfNavGraph()
             }
+        }
         }
     }
 }
