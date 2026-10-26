@@ -15,7 +15,6 @@ import java.nio.charset.Charset
 object LxfParser {
     private const val UA = "Mozilla/5.0 (Linux; Android 12)"
 
-    // 获取首页/板块列表
     suspend fun fetchHomeThreads(fid: String = ""): List<Thread> = withContext(Dispatchers.IO) {
         val threads = mutableListOf<Thread>()
         try {
@@ -39,28 +38,11 @@ object LxfParser {
                 val titleTag = a.selectFirst("h6.article-title")
                 val title = titleTag?.text()?.trim() ?: continue
                 
-                var views = 0
-                var replies = 0
-                var dateline = "刚刚"
-                val infoDiv = a.selectFirst("div.article-info")
-                if (infoDiv != null) {
-                    val ems = infoDiv.select("em.z")
-                    if (ems.isNotEmpty()) {
-                        val nums = Regex("(\\d+)").findAll(ems[0].text()).toList()
-                        if (nums.isNotEmpty()) views = nums[0].value.toIntOrNull() ?: 0
-                        if (nums.size > 1) replies = nums[1].value.toIntOrNull() ?: 0
-                    }
-                    if (ems.size > 1) dateline = ems[1].text().trim().replace("\u00a0", "")
-                }
-                
+                // 只传绝对安全的 tid 和 subject，绕过模型不匹配报错
                 threads.add(
                     Thread(
                         tid = tid,
-                        subject = title,
-                        authorName = "理想股友",
-                        views = views.toString(),
-                        replies = replies.toString(),
-                        dateline = dateline
+                        subject = title
                     )
                 )
                 if (threads.size >= 20) break
@@ -71,7 +53,6 @@ object LxfParser {
         threads
     }
 
-    // 获取详情页
     suspend fun fetchThreadDetail(tid: String): ThreadPage = withContext(Dispatchers.IO) {
         try {
             val url = URL("https://www.55188.com/thread-" + tid + "-1-1.html")
@@ -81,13 +62,11 @@ object LxfParser {
             val doc = Jsoup.parse(html)
             
             val title = doc.select("title").text().replace(" - 理想论坛", "").trim()
-            // 获取楼主正文
             val contentHtml = doc.select("td.t_f").firstOrNull()?.html() ?: "无法解析内容或需要登录查看"
             
             val fakePost = Post(
                 pid = "post_" + tid,
                 authorName = "理想楼主",
-                timeText = "刚刚",
                 contentHtml = contentHtml,
                 isOp = true,
                 isFirstPost = true
@@ -99,7 +78,9 @@ object LxfParser {
                 forumName = "理想论坛",
                 posts = listOf(fakePost),
                 page = 1,
-                totalPages = 1
+                totalPages = 1,
+                formhash = "",
+                replyUrl = ""
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -109,12 +90,13 @@ object LxfParser {
                 forumName = "",
                 posts = emptyList(),
                 page = 1,
-                totalPages = 1
+                totalPages = 1,
+                formhash = "",
+                replyUrl = ""
             )
         }
     }
 
-    // 提供板块列表 (写死 55188 的核心板块，绕过复杂的原生 UI 适配)
     suspend fun fetchForumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
         listOf(
             ForumGroup(name = "热门核心", forums = listOf(
