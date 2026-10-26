@@ -34,20 +34,19 @@ class HomeViewModel(
     private val repository: ForumRepository,
     private val contentCache: ContentCache,
 ) : ViewModel() {
-    // [LXF 终极适配] 启动时自动请求 55188 数据并推给 UI
     init {
         viewModelScope.launch {
             try {
                 val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
                 if (lxfThreads.isNotEmpty()) {
-                    // MTF 默认的 feeds map 是空的，我们强行塞入第一个 tab ("最新") 的数据
                     val currentFeeds = _feeds.value.toMutableMap()
+                    // MTF 的首页默认 key 通常是 "最新" 或者 "newthread"，我们先塞入 "最新"
                     currentFeeds["最新"] = FeedState(state = com.aazhou.mtforum.ui.common.UiState.Success(lxfThreads))
                     _feeds.value = currentFeeds
-                    android.util.Log.d("LXF", "✅ 55188 数据绑定成功，共 ${lxfThreads.size} 条帖子")
+                    android.util.Log.d("LXF", "✅ HomeViewModel 成功接管 55188 数据")
                 }
             } catch (e: Exception) {
-                android.util.Log.e("LXF", "❌ 55188 抓取失败", e)
+                android.util.Log.e("LXF", "❌ 加载失败", e)
             }
         }
     }

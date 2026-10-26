@@ -245,24 +245,6 @@ class ForumRepository(
 
 
     suspend fun guideFeed(view: String, page: Int): ForumPage = withContext(Dispatchers.IO) {
-        // 🚨 [LXF 终极拦截] 直接请求 55188 数据并返回，不再请求 MT 论坛
-        try {
-            val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
-            if (lxfThreads.isNotEmpty()) {
-                return@withContext ForumPage(
-                    forumName = "理想论坛",
-                    announcements = emptyList(),
-                    threads = lxfThreads,
-                    page = page,
-                    hasNext = true
-                )
-            }
-        } catch (e: Exception) {
-            android.util.Log.e("LXF", "55188 拦截请求失败", e)
-        }
-
-        // 如果拦截失败（比如无网络），降级使用 MTF 原逻辑
-
         val blocked = currentBlocked()
         if (view == GUIDE_VIEW_PORTAL) {
             
@@ -1050,11 +1032,6 @@ class ForumRepository(
         questionId: Int = 0,
         answer: String = "",
     ): LoginResult = withContext(Dispatchers.IO) {
-        // 🚨 [LXF 拦截] 此处需要接入 passport.55188.com 的 POST 登录接口
-        // 注意：55188 登录需要图片验证码 (validate 字段)
-        android.util.Log.d("LXF", "尝试登录，需在 UI 层配合验证码输入")
-        // TODO: 这里需要你根据 MTF 的 LoginUiState 返回相应的错误或成功状态
-
         val loginPage = http.get(http.url("member.php?mod=logging&action=login&mobile=2"))
         val loginhash = ForumParser.extractLoginHash(loginPage)
         val formhash = ForumParser.extractLoginFormhash(loginPage) ?: ""
@@ -1353,37 +1330,16 @@ class ForumRepository(
         val res = http.get(url)
         readWriteResult(res, "已移出黑名单")
     }
-
-    // 🚨 [LXF 专属适配] 获取理想论坛首页帖子
-    suspend fun fetchLxfHomeThreads(): List<com.aazhou.mtforum.data.model.Thread> = withContext(Dispatchers.IO) {
-        val threads = mutableListOf<com.aazhou.mtforum.data.model.Thread>()
-        try {
-            val url = java.net.URL("https://www.55188.com/forum.php?mod=guide&view=newthread&mobile=2")
-            val conn = url.openConnection() as java.net.HttpURLConnection
-            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 12)")
-            val html = String(conn.inputStream.readBytes(), java.nio.charset.Charset.forName("UTF-8"))
-            val doc = org.jsoup.Jsoup.parse(html)
-            
-            val links = doc.select("a[href~=thread-\\d+-1-1\\.html]")
-            for (a in links) {
-                val href = a.attr("href")
-                val tidMatch = Regex("thread-(\\d+)-").find(href)
-                if (tidMatch == null) continue
-                val tid = tidMatch.groupValues[1]
-                val titleTag = a.selectFirst("h6.article-title")
-                val title = titleTag?.text()?.trim() ?: continue
-                
-                threads.add(
-                    com.aazhou.mtforum.data.model.Thread(
-                        tid = tid,
-                        subject = title
-                    )
-                )
-                if (threads.size >= 20) break
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        threads
-    }
 }
+
+
+
+
+
+private const val FORMHASH_PAGE = "home.php?mod=space&do=friend&view=blacklist&mobile=2"
+
+
+private const val AT_USER_PAGE_SIZE = 24
+
+
+private const val MAX_AT_USER_PAGES = 5
