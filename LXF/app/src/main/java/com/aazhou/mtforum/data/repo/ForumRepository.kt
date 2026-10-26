@@ -247,6 +247,20 @@ class ForumRepository(
 
 
     suspend fun guideFeed(view: String, page: Int): ForumPage = withContext(Dispatchers.IO) {
+        // 🚨 [LXF 终极强制接管]
+        if (page == 1) {
+            val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads(view)
+            if (lxfThreads.isNotEmpty()) {
+                return@withContext ForumPage(
+                    forumName = "理想论坛",
+                    announcements = emptyList(),
+                    threads = lxfThreads,
+                    page = page,
+                    hasNext = true
+                )
+            }
+        }
+
         val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads(view)
         if (lxfThreads.isNotEmpty()) {
             return@withContext ForumPage(
@@ -312,6 +326,8 @@ class ForumRepository(
         orderType: Int = 0,
         authorId: String? = null,
     ): ThreadPage = withContext(Dispatchers.IO) {
+        return@withContext com.aazhou.mtforum.data.LxfParser.fetchThreadDetail(tid)
+
         val order = if (orderType == 1) "&ordertype=1" else ""
         val author = if (!authorId.isNullOrBlank()) "&authorid=$authorId" else ""
         val tp = ForumParser.parseThreadPage(

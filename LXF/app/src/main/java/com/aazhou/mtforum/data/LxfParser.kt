@@ -38,11 +38,28 @@ object LxfParser {
                 val titleTag = a.selectFirst("h6.article-title")
                 val title = titleTag?.text()?.trim() ?: continue
                 
-                // 只传绝对安全的 tid 和 subject，绕过模型不匹配报错
+                var views = 0
+                var replies = 0
+                var dateline = "刚刚"
+                val infoDiv = a.selectFirst("div.article-info")
+                if (infoDiv != null) {
+                    val ems = infoDiv.select("em.z")
+                    if (ems.isNotEmpty()) {
+                        val nums = Regex("(\\d+)").findAll(ems[0].text()).toList()
+                        if (nums.isNotEmpty()) views = nums[0].value.toIntOrNull() ?: 0
+                        if (nums.size > 1) replies = nums[1].value.toIntOrNull() ?: 0
+                    }
+                    if (ems.size > 1) dateline = ems[1].text().trim().replace("\u00a0", "")
+                }
+                
                 threads.add(
                     Thread(
                         tid = tid,
-                        subject = title
+                        subject = title,
+                        authorName = "理想股友",
+                        viewCount = views.toString(),
+                        replyCount = replies.toString(),
+                        timeText = dateline
                     )
                 )
                 if (threads.size >= 20) break
