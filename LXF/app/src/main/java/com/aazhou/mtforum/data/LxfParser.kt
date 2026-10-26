@@ -15,27 +15,30 @@ import java.nio.charset.Charset
 object LxfParser {
     private const val UA = "Mozilla/5.0 (Linux; Android 12)"
 
-    // 1. 首页及板块列表
+    // 首页及板块列表
     suspend fun fetchHomeThreads(fid: String = ""): List<Thread> = withContext(Dispatchers.IO) {
         val threads = mutableListOf<Thread>()
         try {
-            val urlStr = if (fid.isEmpty()) {
-                "https://www.55188.com/forum.php?mod=guide&view=newthread&mobile=2"
-            } else {
-                "https://www.55188.com/forum-$fid-1.html"
-            }
-            val url = URL(urlStr)
+            // 如果 fid 为空，或者 MTF 传的是非数字（比如 "newthread"），强制使用 68（股票软件）
+            val actualFid = if (fid.isEmpty() || !fid.all { it.isDigit() }) "68" else fid
+            
+            // 统一使用 55188 的手机版板块列表接口
+            val url = URL("https://www.55188.com/forum-$actualFid-1.html")
             val conn = url.openConnection() as HttpURLConnection
             conn.setRequestProperty("User-Agent", UA)
             val html = String(conn.inputStream.readBytes(), Charset.forName("UTF-8"))
             val doc = Jsoup.parse(html)
             
             val links = doc.select("a[href~=thread-\\d+-1-1\\.html]")
+            val addedTids = mutableSetOf<String>()
+            
             for (a in links) {
                 val href = a.attr("href")
                 val tidMatch = Regex("thread-(\\d+)-").find(href)
                 if (tidMatch == null) continue
                 val tid = tidMatch.groupValues[1]
+                if (addedTids.contains(tid)) continue
+                
                 val titleTag = a.selectFirst("h6.article-title")
                 val title = titleTag?.text()?.trim() ?: continue
                 
@@ -53,6 +56,7 @@ object LxfParser {
                     if (ems.size > 1) dateline = ems[1].text().trim().replace("\u00a0", "")
                 }
                 
+                addedTids.add(tid)
                 threads.add(
                     Thread(
                         tid = tid,
@@ -71,7 +75,7 @@ object LxfParser {
         threads
     }
 
-    // 2. 详情页 (补充回来的方法)
+    // 详情页
     suspend fun fetchThreadDetail(tid: String): ThreadPage = withContext(Dispatchers.IO) {
         try {
             val url = URL("https://www.55188.com/thread-" + tid + "-1-1.html")
@@ -116,7 +120,7 @@ object LxfParser {
         }
     }
 
-    // 3. 板块列表 (补充回来的方法)
+    // 板块列表
     suspend fun fetchForumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
         listOf(
             ForumGroup(name = "热门核心", forums = listOf(
