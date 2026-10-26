@@ -122,19 +122,23 @@ object LxfParser {
 
     // 板块列表
     suspend fun fetchForumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
-        listOf(
+        return@withContext         listOf(
             ForumGroup(name = "热门核心", forums = listOf(
                 Forum(fid = "48", name = "指标公式"),
                 Forum(fid = "68", name = "股票软件"),
                 Forum(fid = "90", name = "指标问答"),
-                Forum(fid = "93", name = "金钻指标")
+                Forum(fid = "93", name = "金钻指标"),
             )),
             ForumGroup(name = "实战交流", forums = listOf(
                 Forum(fid = "8", name = "实战交流"),
                 Forum(fid = "102", name = "选股技巧"),
                 Forum(fid = "45", name = "研究报告"),
-                Forum(fid = "20", name = "休闲娱乐")
-            ))
+                Forum(fid = "20", name = "休闲娱乐"),
+            )),
+            ForumGroup(name = "官方其它板块", forums = listOf(
+                Forum(fid = "77", name = "新手学习"),
+                Forum(fid = "40", name = "问题反馈"),
+            )),
         )
     }
 }
