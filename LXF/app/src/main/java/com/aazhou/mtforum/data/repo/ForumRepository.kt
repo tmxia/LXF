@@ -43,6 +43,11 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import java.io.File
 
+private const val MAX_AT_USER_PAGES = 10
+private const val AT_USER_PAGE_SIZE = 50
+private const val FORMHASH_PAGE = "forum.php"
+
+
 
 private val REPLY_ERROR_PATTERN = Regex("抱歉|非法操作|请先登录|需要先登录|没有权限|审核")
 
@@ -250,7 +255,7 @@ class ForumRepository(
         val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads(view)
         if (lxfThreads.isNotEmpty()) {
             return@withContext ForumPage(
-                forumName = "理想论坛",
+                forumName = "股票软件",
                 announcements = emptyList(),
                 threads = lxfThreads,
                 page = page,

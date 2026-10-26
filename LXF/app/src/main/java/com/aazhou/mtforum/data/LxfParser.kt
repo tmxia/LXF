@@ -18,13 +18,27 @@ object LxfParser {
     suspend fun fetchHomeThreads(fid: String = ""): List<Thread> = withContext(Dispatchers.IO) {
         val threads = mutableListOf<Thread>()
         try {
-            val isNumeric = fid.all { it.isDigit() }
-            val url = if (isNumeric) {
-                URL("https://www.55188.com/forum-$fid-1.html")
+            // 强制首页默认为股票软件 68
+            var actualFid = "68"
+            var typeId: String? = null
+
+            // 如果传入的 fid 包含下划线（如 68_129），说明是子标签
+            if (fid.contains("_")) {
+                val parts = fid.split("_")
+                actualFid = parts[0]
+                typeId = parts.getOrNull(1)
+            } else if (fid.isNotEmpty() && fid.all { it.isDigit() }) {
+                actualFid = fid
+            }
+
+            // 构造 URL：普通板块用 forum-xx-1.html，子标签用 filter=typeid 形式
+            val urlStr = if (typeId != null) {
+                "https://www.55188.com/forum.php?mod=forumdisplay&fid=$actualFid&filter=typeid&typeid=$typeId"
             } else {
-                URL("https://www.55188.com/forum.php?mod=guide&view=newthread&mobile=2")
+                "https://www.55188.com/forum-$actualFid-1.html"
             }
             
+            val url = URL(urlStr)
             val conn = url.openConnection() as HttpURLConnection
             conn.setRequestProperty("User-Agent", UA)
             val html = String(conn.inputStream.readBytes(), Charset.forName("UTF-8"))
@@ -130,19 +144,22 @@ object LxfParser {
         }
     }
 
+    // 定制板块列表：主要展示股票软件及其子分类
     suspend fun fetchForumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
         listOf(
+            ForumGroup(name = "股票软件", forums = listOf(
+                Forum(fid = "68", name = "全部主题"),
+                Forum(fid = "68_129", name = "通达信"),
+                Forum(fid = "68_179", name = "大智慧"),
+                Forum(fid = "68_130", name = "同花顺"),
+                Forum(fid = "68_131", name = "东财通"),
+                Forum(fid = "68_127", name = "飞狐"),
+                Forum(fid = "68_132", name = "其它")
+            )),
             ForumGroup(name = "热门核心", forums = listOf(
                 Forum(fid = "48", name = "指标公式"),
-                Forum(fid = "68", name = "股票软件"),
                 Forum(fid = "90", name = "指标问答"),
                 Forum(fid = "93", name = "金钻指标")
-            )),
-            ForumGroup(name = "实战交流", forums = listOf(
-                Forum(fid = "8", name = "实战交流"),
-                Forum(fid = "102", name = "选股技巧"),
-                Forum(fid = "45", name = "研究报告"),
-                Forum(fid = "20", name = "休闲娱乐")
             ))
         )
     }
