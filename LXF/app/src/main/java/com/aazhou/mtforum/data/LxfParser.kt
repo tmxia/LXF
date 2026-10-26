@@ -1,10 +1,6 @@
 package com.aazhou.mtforum.data
 
 import com.aazhou.mtforum.data.model.Thread
-import com.aazhou.mtforum.data.model.ThreadPage
-import com.aazhou.mtforum.data.model.Post
-import com.aazhou.mtforum.data.model.ForumGroup
-import com.aazhou.mtforum.data.model.Forum
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
@@ -68,66 +64,5 @@ object LxfParser {
             e.printStackTrace()
         }
         threads
-    }
-
-    suspend fun fetchThreadDetail(tid: String): ThreadPage = withContext(Dispatchers.IO) {
-        try {
-            val url = URL("https://www.55188.com/thread-" + tid + "-1-1.html")
-            val conn = url.openConnection() as HttpURLConnection
-            conn.setRequestProperty("User-Agent", UA)
-            val html = String(conn.inputStream.readBytes(), Charset.forName("UTF-8"))
-            val doc = Jsoup.parse(html)
-            
-            val title = doc.select("title").text().replace(" - 理想论坛", "").trim()
-            val contentHtml = doc.select("td.t_f").firstOrNull()?.html() ?: "无法解析内容或需要登录查看"
-            
-            val fakePost = Post(
-                pid = "post_" + tid,
-                authorName = "理想楼主",
-                contentHtml = contentHtml,
-                isOp = true,
-                isFirstPost = true
-            )
-            
-            ThreadPage(
-                tid = tid,
-                subject = title,
-                forumName = "理想论坛",
-                posts = listOf(fakePost),
-                page = 1,
-                totalPages = 1,
-                formhash = "",
-                replyUrl = ""
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-            ThreadPage(
-                tid = tid,
-                subject = "加载失败",
-                forumName = "",
-                posts = emptyList(),
-                page = 1,
-                totalPages = 1,
-                formhash = "",
-                replyUrl = ""
-            )
-        }
-    }
-
-    suspend fun fetchForumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
-        listOf(
-            ForumGroup(name = "热门核心", forums = listOf(
-                Forum(fid = "48", name = "指标公式"),
-                Forum(fid = "68", name = "股票软件"),
-                Forum(fid = "90", name = "指标问答"),
-                Forum(fid = "93", name = "金钻指标")
-            )),
-            ForumGroup(name = "实战交流", forums = listOf(
-                Forum(fid = "8", name = "实战交流"),
-                Forum(fid = "102", name = "选股技巧"),
-                Forum(fid = "45", name = "研究报告"),
-                Forum(fid = "20", name = "休闲娱乐")
-            ))
-        )
     }
 }

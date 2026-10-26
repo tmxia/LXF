@@ -146,6 +146,25 @@ class HomeViewModel(
     }
 
     private suspend fun reload(view: String, userInitiated: Boolean = false) {
+        // 🚨 [LXF 顶层拦截] 直接请求 55188 并更新 UI 状态，跳过所有 MTF 原生请求
+        _refreshing.value = _refreshing.value + view
+        try {
+            val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads(view)
+            val currentFeed = _feeds.value[view]
+            val newFeed = FeedState(
+                state = com.aazhou.mtforum.ui.common.UiState.Success(lxfThreads),
+                page = 1,
+                loadingMore = false,
+                hasNext = false
+            )
+            _feeds.value = _feeds.value + (view to newFeed)
+        } catch (e: Exception) {
+            android.util.Log.e("LXF", "LXF 数据加载失败", e)
+        } finally {
+            _refreshing.value = _refreshing.value - view
+        }
+        if (true) return // 强制返回，阻断下方 MTF 原生逻辑
+
         if (view == HomeTabs.HOT) {
             
             runCatching { repository.home() }.onSuccess {
