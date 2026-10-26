@@ -15,37 +15,53 @@ import java.nio.charset.Charset
 object LxfParser {
     private const val UA = "Mozilla/5.0 (Linux; Android 12)"
 
-    // 首页及板块列表
     suspend fun fetchHomeThreads(fid: String = ""): List<Thread> = withContext(Dispatchers.IO) {
         val threads = mutableListOf<Thread>()
         try {
-            // 如果 fid 为空，或者 MTF 传的是非数字（比如 "newthread"），强制使用 68（股票软件）
-            val actualFid = if (fid.isEmpty() || !fid.all { it.isDigit() }) "68" else fid
+            val isNumeric = fid.all { it.isDigit() }
+            val url = if (isNumeric) {
+                URL("https://www.55188.com/forum-$fid-1.html")
+            } else {
+                URL("https://www.55188.com/forum.php?mod=guide&view=newthread&mobile=2")
+            }
             
-            // 统一使用 55188 的手机版板块列表接口
-            val url = URL("https://www.55188.com/forum-$actualFid-1.html")
             val conn = url.openConnection() as HttpURLConnection
             conn.setRequestProperty("User-Agent", UA)
             val html = String(conn.inputStream.readBytes(), Charset.forName("UTF-8"))
             val doc = Jsoup.parse(html)
             
-            val links = doc.select("a[href~=thread-\\d+-1-1\\.html]")
+            // 兼容首页和板块页：只要有 thread- 链接都抓出来
+            val links = doc.select("a[href*=thread-]")
             val addedTids = mutableSetOf<String>()
             
             for (a in links) {
                 val href = a.attr("href")
+                // 过滤掉发帖链接
+                if (href.contains("forum-post")) continue
+                
                 val tidMatch = Regex("thread-(\\d+)-").find(href)
                 if (tidMatch == null) continue
                 val tid = tidMatch.groupValues[1]
                 if (addedTids.contains(tid)) continue
                 
-                val titleTag = a.selectFirst("h6.article-title")
-                val title = titleTag?.text()?.trim() ?: continue
+                // 标题获取：首页在 h6 里，板块页直接在 a 标签里（可能包含 font）
+                var title = ""
+                val h6 = a.selectFirst("h6")
+                if (h6 != null) {
+                    title = h6.text().trim()
+                } else {
+                    title = a.text().trim()
+                }
+                
+                // 过滤掉太短的无效标题
+                if (title.length < 5 || title.contains("发帖") || title.contains("回复")) continue
                 
                 var views = 0
                 var replies = 0
                 var dateline = "刚刚"
-                val infoDiv = a.selectFirst("div.article-info")
+                
+                // 首页的时间/浏览数据提取
+                val infoDiv = a.selectFirst("div.article-info") ?: a.parent()?.selectFirst("div.article-info")
                 if (infoDiv != null) {
                     val ems = infoDiv.select("em.z")
                     if (ems.isNotEmpty()) {
@@ -67,7 +83,7 @@ object LxfParser {
                         timeText = dateline
                     )
                 )
-                if (threads.size >= 20) break
+                if (threads.size >= 30) break
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -75,7 +91,6 @@ object LxfParser {
         threads
     }
 
-    // 详情页
     suspend fun fetchThreadDetail(tid: String): ThreadPage = withContext(Dispatchers.IO) {
         try {
             val url = URL("https://www.55188.com/thread-" + tid + "-1-1.html")
@@ -120,25 +135,20 @@ object LxfParser {
         }
     }
 
-    // 板块列表
     suspend fun fetchForumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
-        return@withContext         listOf(
+        listOf(
             ForumGroup(name = "热门核心", forums = listOf(
                 Forum(fid = "48", name = "指标公式"),
                 Forum(fid = "68", name = "股票软件"),
                 Forum(fid = "90", name = "指标问答"),
-                Forum(fid = "93", name = "金钻指标"),
+                Forum(fid = "93", name = "金钻指标")
             )),
             ForumGroup(name = "实战交流", forums = listOf(
                 Forum(fid = "8", name = "实战交流"),
                 Forum(fid = "102", name = "选股技巧"),
                 Forum(fid = "45", name = "研究报告"),
-                Forum(fid = "20", name = "休闲娱乐"),
-            )),
-            ForumGroup(name = "官方其它板块", forums = listOf(
-                Forum(fid = "77", name = "新手学习"),
-                Forum(fid = "40", name = "问题反馈"),
-            )),
+                Forum(fid = "20", name = "休闲娱乐")
+            ))
         )
     }
 }
