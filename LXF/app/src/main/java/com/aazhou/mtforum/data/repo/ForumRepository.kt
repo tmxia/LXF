@@ -231,6 +231,8 @@ class ForumRepository(
     fun sessionCookieHeader(): String = http.cookieHeader()
 
     suspend fun forumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
+        return@withContext com.aazhou.mtforum.data.LxfParser.fetchForumGroups()
+
         ForumParser.parseForumList(http.get(http.url("forum.php?forumlist=1&mobile=2")))
     }
 
@@ -250,17 +252,15 @@ class ForumRepository(
 
 
     suspend fun guideFeed(view: String, page: Int): ForumPage = withContext(Dispatchers.IO) {
-        if (page == 1) {
-            val lxfThreads = fetchLxfHomeThreads()
-            if (lxfThreads.isNotEmpty()) {
-                return@withContext ForumPage(
-                    forumName = "理想论坛",
-                    announcements = emptyList(),
-                    threads = lxfThreads,
-                    page = page,
-                    hasNext = true
-                )
-            }
+        val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads(view)
+        if (lxfThreads.isNotEmpty()) {
+            return@withContext ForumPage(
+                forumName = "理想论坛",
+                announcements = emptyList(),
+                threads = lxfThreads,
+                page = page,
+                hasNext = true
+            )
         }
 
         val blocked = currentBlocked()
@@ -1348,8 +1348,16 @@ class ForumRepository(
         val res = http.get(url)
         readWriteResult(res, "已移出黑名单")
     }
-
-    suspend fun fetchLxfHomeThreads(): List<com.aazhou.mtforum.data.model.Thread> {
-        return com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
-    }
 }
+
+
+
+
+
+private const val FORMHASH_PAGE = "home.php?mod=space&do=friend&view=blacklist&mobile=2"
+
+
+private const val AT_USER_PAGE_SIZE = 24
+
+
+private const val MAX_AT_USER_PAGES = 5
