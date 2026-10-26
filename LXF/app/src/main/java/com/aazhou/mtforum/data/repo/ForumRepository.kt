@@ -43,6 +43,11 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import java.io.File
 
+private const val MAX_AT_USER_PAGES = 10
+private const val AT_USER_PAGE_SIZE = 50
+private const val FORMHASH_PAGE = "forum.php"
+
+
 
 private val REPLY_ERROR_PATTERN = Regex("抱歉|非法操作|请先登录|需要先登录|没有权限|审核")
 
@@ -245,6 +250,20 @@ class ForumRepository(
 
 
     suspend fun guideFeed(view: String, page: Int): ForumPage = withContext(Dispatchers.IO) {
+        // 🚨 [LXF 终极拦截] 直接返回 55188 数据
+        if (page == 1) {
+            val lxfThreads = fetchLxfHomeThreads()
+            if (lxfThreads.isNotEmpty()) {
+                return@withContext ForumPage(
+                    forumName = "理想论坛",
+                    announcements = emptyList(),
+                    threads = lxfThreads,
+                    page = page,
+                    hasNext = true
+                )
+            }
+        }
+
         val blocked = currentBlocked()
         if (view == GUIDE_VIEW_PORTAL) {
             
@@ -1330,16 +1349,36 @@ class ForumRepository(
         val res = http.get(url)
         readWriteResult(res, "已移出黑名单")
     }
+
+    suspend fun fetchLxfHomeThreads(): List<com.aazhou.mtforum.data.model.Thread> = withContext(Dispatchers.IO) {
+        val threads = mutableListOf<com.aazhou.mtforum.data.model.Thread>()
+        try {
+            val url = java.net.URL("https://www.55188.com/forum.php?mod=guide&view=newthread&mobile=2")
+            val conn = url.openConnection() as java.net.HttpURLConnection
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 12)")
+            val html = String(conn.inputStream.readBytes(), java.nio.charset.Charset.forName("UTF-8"))
+            val doc = org.jsoup.Jsoup.parse(html)
+            
+            val links = doc.select("a[href~=thread-\\d+-1-1\\.html]")
+            for (a in links) {
+                val href = a.attr("href")
+                val tidMatch = Regex("thread-(\\d+)-").find(href)
+                if (tidMatch == null) continue
+                val tid = tidMatch.groupValues[1]
+                val titleTag = a.selectFirst("h6.article-title")
+                val title = titleTag?.text()?.trim() ?: continue
+                
+                threads.add(
+                    com.aazhou.mtforum.data.model.Thread(
+                        tid = tid,
+                        subject = title
+                    )
+                )
+                if (threads.size >= 20) break
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        threads
+    }
 }
-
-
-
-
-
-private const val FORMHASH_PAGE = "home.php?mod=space&do=friend&view=blacklist&mobile=2"
-
-
-private const val AT_USER_PAGE_SIZE = 24
-
-
-private const val MAX_AT_USER_PAGES = 5

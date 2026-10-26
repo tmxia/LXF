@@ -153,16 +153,7 @@ class HomeViewModel(
                 saveHomeToCache(it)
             }
         }
-        runCatching { run {
-        val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
-        ForumPage(
-            forumName = "理想论坛",
-            announcements = emptyList(),
-            threads = lxfThreads,
-            page = 1,
-            hasNext = true
-        )
-    } }
+        runCatching { repository.guideFeed(view, 1) }
             .onSuccess { data ->
                 update(view) {
                     it.copy(
@@ -194,16 +185,7 @@ class HomeViewModel(
         update(view) { it.copy(loadingMore = true) }
         viewModelScope.launch {
             val next = current.page + 1
-            runCatching { run {
-        val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
-        ForumPage(
-            forumName = "理想论坛",
-            announcements = emptyList(),
-            threads = lxfThreads,
-            page = next,
-            hasNext = true
-        )
-    } }
+            runCatching { repository.guideFeed(view, next) }
                 .onSuccess { data ->
                     
                     val existing = (_feeds.value[view]?.state as? UiState.Success)?.data.orEmpty()
