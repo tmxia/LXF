@@ -7,12 +7,10 @@ import org.jsoup.Jsoup
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
-import kotlin.random.Random
 
 object LxfParser {
     private const val UA = "Mozilla/5.0 (Linux; Android 12)"
 
-    // 抓取列表，且不污染原有结构
     suspend fun fetchHomeThreads(): List<Thread> = withContext(Dispatchers.IO) {
         val threads = mutableListOf<Thread>()
         try {
@@ -31,30 +29,11 @@ object LxfParser {
                 val titleTag = a.selectFirst("h6.article-title")
                 val title = titleTag?.text()?.trim() ?: continue
                 
-                // 提取真实浏览量和时间
-                var views = 0
-                var dateline = "刚刚"
-                val infoDiv = a.selectFirst("div.article-info")
-                if (infoDiv != null) {
-                    val ems = infoDiv.select("em.z")
-                    if (ems.isNotEmpty()) {
-                        val vMatch = Regex("(\\d+)").find(ems[0].text())
-                        if (vMatch != null) views = vMatch.groupValues[1].toIntOrNull() ?: 0
-                    }
-                    if (ems.size > 1) {
-                        dateline = ems[1].text().trim()
-                    }
-                }
-                
-                // 构造 MTF 的 Thread 模型
+                // 只传绝对存在的 tid 和 subject 字段
                 threads.add(
                     Thread(
                         tid = tid,
-                        subject = title,
-                        authorName = "理想股友",
-                        views = views,
-                        replies = Random.nextInt(0, 50),
-                        dateline = dateline
+                        subject = title
                     )
                 )
                 if (threads.size >= 20) break
