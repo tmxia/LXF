@@ -30,13 +30,11 @@ object LxfParser {
             val html = String(conn.inputStream.readBytes(), Charset.forName("UTF-8"))
             val doc = Jsoup.parse(html)
             
-            // 兼容首页和板块页：只要有 thread- 链接都抓出来
             val links = doc.select("a[href*=thread-]")
             val addedTids = mutableSetOf<String>()
             
             for (a in links) {
                 val href = a.attr("href")
-                // 过滤掉发帖链接
                 if (href.contains("forum-post")) continue
                 
                 val tidMatch = Regex("thread-(\\d+)-").find(href)
@@ -44,7 +42,6 @@ object LxfParser {
                 val tid = tidMatch.groupValues[1]
                 if (addedTids.contains(tid)) continue
                 
-                // 标题获取：首页在 h6 里，板块页直接在 a 标签里（可能包含 font）
                 var title = ""
                 val h6 = a.selectFirst("h6")
                 if (h6 != null) {
@@ -53,14 +50,12 @@ object LxfParser {
                     title = a.text().trim()
                 }
                 
-                // 过滤掉太短的无效标题
                 if (title.length < 5 || title.contains("发帖") || title.contains("回复")) continue
                 
                 var views = 0
                 var replies = 0
                 var dateline = "刚刚"
                 
-                // 首页的时间/浏览数据提取
                 val infoDiv = a.selectFirst("div.article-info") ?: a.parent()?.selectFirst("div.article-info")
                 if (infoDiv != null) {
                     val ems = infoDiv.select("em.z")
