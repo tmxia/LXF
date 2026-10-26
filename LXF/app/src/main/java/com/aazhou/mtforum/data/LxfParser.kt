@@ -29,7 +29,7 @@ object LxfParser {
                 val titleTag = a.selectFirst("h6.article-title")
                 val title = titleTag?.text()?.trim() ?: continue
                 
-                // 只传绝对存在的 tid 和 subject 字段
+                // 只传绝对存在的 tid 和 subject，防止模型不匹配
                 threads.add(
                     Thread(
                         tid = tid,

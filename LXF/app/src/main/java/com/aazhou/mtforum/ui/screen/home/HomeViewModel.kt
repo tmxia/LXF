@@ -34,23 +34,6 @@ class HomeViewModel(
     private val repository: ForumRepository,
     private val contentCache: ContentCache,
 ) : ViewModel() {
-    init {
-        viewModelScope.launch {
-            try {
-                val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
-                if (lxfThreads.isNotEmpty()) {
-                    val currentFeeds = _feeds.value.toMutableMap()
-                    // MTF 的首页默认 key 通常是 "最新" 或者 "newthread"，我们先塞入 "最新"
-                    currentFeeds["最新"] = FeedState(state = com.aazhou.mtforum.ui.common.UiState.Success(lxfThreads))
-                    _feeds.value = currentFeeds
-                    android.util.Log.d("LXF", "✅ HomeViewModel 成功接管 55188 数据")
-                }
-            } catch (e: Exception) {
-                android.util.Log.e("LXF", "❌ 加载失败", e)
-            }
-        }
-    }
-
 
     
     private val _hot = MutableStateFlow<HomeData?>(null)
@@ -170,7 +153,16 @@ class HomeViewModel(
                 saveHomeToCache(it)
             }
         }
-        runCatching { repository.guideFeed(view, 1) }
+        runCatching { run {
+        val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
+        ForumPage(
+            forumName = "理想论坛",
+            announcements = emptyList(),
+            threads = lxfThreads,
+            page = 1,
+            hasNext = true
+        )
+    } }
             .onSuccess { data ->
                 update(view) {
                     it.copy(
@@ -202,7 +194,16 @@ class HomeViewModel(
         update(view) { it.copy(loadingMore = true) }
         viewModelScope.launch {
             val next = current.page + 1
-            runCatching { repository.guideFeed(view, next) }
+            runCatching { run {
+        val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
+        ForumPage(
+            forumName = "理想论坛",
+            announcements = emptyList(),
+            threads = lxfThreads,
+            page = next,
+            hasNext = true
+        )
+    } }
                 .onSuccess { data ->
                     
                     val existing = (_feeds.value[view]?.state as? UiState.Success)?.data.orEmpty()
