@@ -250,7 +250,6 @@ class ForumRepository(
 
 
     suspend fun guideFeed(view: String, page: Int): ForumPage = withContext(Dispatchers.IO) {
-        // 🚨 [LXF 终极拦截] 直接返回 55188 数据
         if (page == 1) {
             val lxfThreads = fetchLxfHomeThreads()
             if (lxfThreads.isNotEmpty()) {
@@ -1350,35 +1349,7 @@ class ForumRepository(
         readWriteResult(res, "已移出黑名单")
     }
 
-    suspend fun fetchLxfHomeThreads(): List<com.aazhou.mtforum.data.model.Thread> = withContext(Dispatchers.IO) {
-        val threads = mutableListOf<com.aazhou.mtforum.data.model.Thread>()
-        try {
-            val url = java.net.URL("https://www.55188.com/forum.php?mod=guide&view=newthread&mobile=2")
-            val conn = url.openConnection() as java.net.HttpURLConnection
-            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 12)")
-            val html = String(conn.inputStream.readBytes(), java.nio.charset.Charset.forName("UTF-8"))
-            val doc = org.jsoup.Jsoup.parse(html)
-            
-            val links = doc.select("a[href~=thread-\\d+-1-1\\.html]")
-            for (a in links) {
-                val href = a.attr("href")
-                val tidMatch = Regex("thread-(\\d+)-").find(href)
-                if (tidMatch == null) continue
-                val tid = tidMatch.groupValues[1]
-                val titleTag = a.selectFirst("h6.article-title")
-                val title = titleTag?.text()?.trim() ?: continue
-                
-                threads.add(
-                    com.aazhou.mtforum.data.model.Thread(
-                        tid = tid,
-                        subject = title
-                    )
-                )
-                if (threads.size >= 20) break
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        threads
+    suspend fun fetchLxfHomeThreads(): List<com.aazhou.mtforum.data.model.Thread> {
+        return com.aazhou.mtforum.data.LxfParser.fetchHomeThreads()
     }
 }

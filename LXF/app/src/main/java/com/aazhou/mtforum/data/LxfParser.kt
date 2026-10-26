@@ -45,12 +45,14 @@ object LxfParser {
                     }
                 }
                 
+                // 这里使用 .toString() 将 Int 强转为 String，匹配报错日志中的 'String?' 类型
                 threads.add(
                     Thread(
                         tid = tid,
                         subject = title,
-                        viewCount = views,
-                        replyCount = replies,
+                        authorName = "理想股友",
+                        viewCount = views.toString(),
+                        replyCount = replies.toString(),
                         timeText = dateline
                     )
                 )
