@@ -19,9 +19,9 @@ object LxfParser {
     suspend fun fetchHomeThreads(fid: String = ""): List<Thread> = withContext(Dispatchers.IO) {
         val threads = mutableListOf<Thread>()
         try {
+            // 默认锁定 68（股票软件）
             var actualFid = "68"
             var typeId: String? = null
-            
             if (fid.contains("_")) {
                 val parts = fid.split("_")
                 actualFid = parts[0]
@@ -62,28 +62,18 @@ object LxfParser {
                 // 1. 精准提取时间：通常在一个类名为 author-name 的 div 下的 p 标签里的第一个 span
                 var timeText = "刚刚"
                 val timeSpan = article.selectFirst(".author-name p span")
-                if (timeSpan != null) {
-                    timeText = timeSpan.text().trim()
-                }
+                if (timeSpan != null) timeText = timeSpan.text().trim()
                 
-                // 2. 精准提取浏览量和回复量：在 footer.item-footer 里
+                // 2. 精准提取底部数据 (查看、回复)
                 var views = "0"
                 var replies = "0"
                 val footer = article.selectFirst("footer.item-footer")
                 if (footer != null) {
                     val footerText = footer.text()
-                    
-                    // 匹配 "查看 1万" 或 "查看 123"
                     val viewMatch = Regex("查看\\s*([\\d\\.]+万?)").find(footerText)
-                    if (viewMatch != null) {
-                        views = viewMatch.groupValues[1]
-                    }
-                    
-                    // 匹配 "回复 123"
+                    if (viewMatch != null) views = viewMatch.groupValues[1]
                     val replyMatch = Regex("回复\\s*(\\d+)").find(footerText)
-                    if (replyMatch != null) {
-                        replies = replyMatch.groupValues[1]
-                    }
+                    if (replyMatch != null) replies = replyMatch.groupValues[1]
                 }
                 
                 threads.add(
@@ -114,7 +104,16 @@ object LxfParser {
             val doc = Jsoup.parse(html)
             
             val title = doc.select("title").text().replace(" - 理想论坛", "").trim()
-            val contentHtml = doc.select("td.t_f").firstOrNull()?.html() ?: "无法解析内容或需要登录查看"
+            
+            // 3. 提取详情页完整正文内容（包含附件、表格、图片）
+            // 获取帖子的主体内容区域
+            val contentElement = doc.selectFirst("div.message") ?: doc.selectFirst("td.t_f")
+            var contentHtml = contentElement?.html() ?: "无法解析内容或需要登录查看"
+            
+            // 修正图片的相对路径（防止 App 里图片加载不出来）
+            contentHtml = contentHtml.replace("src=\"/", "src=\"https://www.55188.com/")
+            contentHtml = contentHtml.replace("src=\"static/", "src=\"https://www.55188.com/static/")
+            contentHtml = contentHtml.replace("data-original=\"/", "data-original=\"https://www.55188.com/")
             
             val fakePost = Post(
                 pid = "post_" + tid,
@@ -140,8 +139,8 @@ object LxfParser {
         }
     }
 
+    // 板块列表已写死（包含股票软件的全量子标签）
     suspend fun fetchForumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
-        // 这里保留你刚才硬编码的完整板块列表
         listOf(
             ForumGroup(name = "股票软件", forums = listOf(
                 Forum(fid = "68", name = "全部主题"),
@@ -154,7 +153,9 @@ object LxfParser {
                 Forum(fid = "68_87", name = "股票池"),
                 Forum(fid = "68_92", name = "AI编程"),
                 Forum(fid = "68_81", name = "教程"),
-                Forum(fid = "68_89", name = "小工具")
+                Forum(fid = "68_89", name = "小工具"),
+                Forum(fid = "68_82", name = "数据"),
+                Forum(fid = "68_90", name = "互助")
             )),
             ForumGroup(name = "指标公式", forums = listOf(
                 Forum(fid = "48", name = "全部主题"),
