@@ -1,6 +1,8 @@
 package com.aazhou.mtforum.ui.screen.profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,7 +27,7 @@ fun LxfProfileScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF7F8FA))
-            .verticalScroll(androidx.compose.foundation.rememberScrollState())
+            .verticalScroll(rememberScrollState())
     ) {
         // 头部用户信息
         Row(
