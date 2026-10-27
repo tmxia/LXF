@@ -14,48 +14,62 @@ import java.nio.charset.Charset
 
 object LxfParser {
     private const val UA = "Mozilla/5.0 (Linux; Android 12)"
+    private const val COOKIE = "HMACCOUNT=F3FD580504BD7E15; 55188_passport=kn9qGAdENqKqk9ZT%2B%2FWjDVP35XMgGU142hHt6Ui3%2F9zKlODtT6%2F2%2B%2BoqX38%2FYp%2F4hg4hK7ss26VuIVFTpcvK%2BOOz%2FCvwqmKKSStJjyp%2FYnZQHjsm1NIFcGkjPvkyZkTmqZntqnYuN%2BuUJH%2B4qfsL2cST%2F2tMPu29b27w%2FXQF1ak%3D; passport2bbs=gXfzvUFx5Yx567ZhgndUtE89%2F81R6s5TCwZUBHERqfjVS%2FHg1lbEh%2FKGNJI7x1dK; vOVx_56cc_auth=b651Jm4PoQPCrseWTLmKlXp4zb8jVErgIwlAgbGXSi8pm42VFPmi788YjNWvibki6GzDbVKMY%2BxCC%2FC5UYkNjzlTAXo"
 
     suspend fun fetchHomeThreads(fid: String = ""): List<Thread> = withContext(Dispatchers.IO) {
         val threads = mutableListOf<Thread>()
         try {
-            // 强制使用 68（股票软件板块）
-            val url = URL("https://www.55188.com/forum-68-1.html")
+            var actualFid = "68"
+            var typeId: String? = null
+            
+            // 解析子标签 (如 68_129)
+            if (fid.contains("_")) {
+                val parts = fid.split("_")
+                actualFid = parts[0]
+                typeId = parts.getOrNull(1)
+            } else if (fid.isNotEmpty() && fid.all { it.isDigit() }) {
+                // 如果上层传入单纯的数字 fid，说明是点击了某个大类板块
+                actualFid = fid
+            } else {
+                // 如果传入的是 "newthread" 等字符串，强行锁定到 68
+                actualFid = "68"
+            }
+
+            val urlStr = if (typeId != null) {
+                "https://www.55188.com/forum.php?mod=forumdisplay&fid=$actualFid&filter=typeid&typeid=$typeId"
+            } else {
+                "https://www.55188.com/forum-$actualFid-1.html"
+            }
+
+            val url = URL(urlStr)
             val conn = url.openConnection() as HttpURLConnection
             conn.setRequestProperty("User-Agent", UA)
-            conn.setRequestProperty("Cookie", "HMACCOUNT=F3FD580504BD7E15; Hm_lpvt_0233b908b2bf29bfd788abd7ee3556da=1757035032; 55188_passport=kn9qGAdENqKqk9ZT%2B%2FWjDVP35XMgGU142hHt6Ui3%2F9zKlODtT6%2F2%2B%2BoqX38%2FYp%2F4hg4hK7ss26VuIVFTpcvK%2BOOz%2FCvwqmKKSStJjyp%2FYnZQHjsm1NIFcGkjPvkyZkTmqZntqnYuN%2BuUJH%2B4qfsL2cST%2F2tMPu29b27w%2FXQF1ak%3D; passport2bbs=gXfzvUFx5Yx567ZhgndUtE89%2F81R6s5TCwZUBHERqfjVS%2FHg1lbEh%2FKGNJI7x1dK; cdb2_auth=jiqsgmbJXdBFKY8Asxbfh26nwQIv%2BJpbCF%2F01k%2BELaRiGSsEFr%2BxBzq%2BVeirpKA0; vOVx_56cc_saltkey=aLJSxMVL; vOVx_56cc_lastvisit=1792927840; vOVx_56cc_auth=b651Jm4PoQPCrseWTLmKlXp4zb8jVErgIwlAgbGXSi8pm42VFPmi788YjNWvibki6GzDbVKMY%2BxCC%2FC5UYkNjzlTAXo; vOVx_56cc_home_diymode=1; vOVx_56cc_atarget=1; attack_pass=pyh0VRLAJ0gLuaQMOiHLxQ%2C1793167318; vOVx_56cc_visitedfid=68D90D48D93D77D8D20D102; vOVx_56cc_sid=c9HHt7; vOVx_56cc_lip=49.118.86.233%2C1793080918; vOVx_56cc_lastact=1793104148%09forum.php%09forumdisplay; vOVx_56cc_st_t=784998%7C1793104148%7C158dfd241300e62b8417234e70a6fe54; vOVx_56cc_forum_lastvisit=D_102_1793002691D_20_1793002694D_8_1793002717D_77_1793002722D_93_1793002727D_48_1793002736D_90_1793080918D_68_1793104148; vOVx_56cc_ulastactivity=608b5Iwg34O0vA0kJ0gHcUd9ZjTiG2S6yQgcUnXnFTTQmY%2F2GD2R")
+            conn.setRequestProperty("Cookie", COOKIE)
             
             val html = String(conn.inputStream.readBytes(), Charset.forName("UTF-8"))
             val doc = Jsoup.parse(html)
             
-            // 直接锁定真实的帖子区域
             val articles = doc.select("article.thread-item")
-            for (article in articles) {
-                // 排除带有 zd（置顶）的全局公告
-                if (article.classNames().contains("zd")) continue
-                
-                val a = article.selectFirst("a.subject") ?: continue
-                val href = a.attr("href")
-                val tidMatch = Regex("thread-(\\d+)-").find(href) ?: continue
-                val tid = tidMatch.groupValues[1]
-                val title = a.text().trim()
-                
-                // 提取卡片内所有文本，用正则捞取数据
-                val text = article.text()
-                val viewsMatch = Regex("(\\d+)\\s*(?:阅|浏览)").find(text)
-                val repliesMatch = Regex("(\\d+)\\s*回复").find(text)
-                val timeMatch = Regex("\\d{2,4}-\\d{2}-\\d{2}\\s*\\d{2}:\\d{2}").find(text)
-                
-                threads.add(
-                    Thread(
-                        tid = tid,
-                        subject = title,
-                        authorName = "理想股友",
-                        viewCount = viewsMatch?.groupValues?.get(1) ?: "0",
-                        replyCount = repliesMatch?.groupValues?.get(1) ?: "0",
-                        timeText = timeMatch?.value ?: "刚刚"
-                    )
-                )
-                if (threads.size >= 30) break
+            val addedTids = mutableSetOf<String>()
+            
+            if (articles.isNotEmpty()) {
+                for (article in articles) {
+                    if (article.classNames().contains("zd")) continue
+                    val a = article.selectFirst("a.subject") ?: continue
+                    parseThread(a, article.text(), threads, addedTids)
+                    if (threads.size >= 30) break
+                }
+            } else {
+                // 兜底方案：直接找 a 标签
+                val links = doc.select("a[href~=thread-\\d+-1-1\\.html]")
+                for (a in links) {
+                    val href = a.attr("href")
+                    if (href.contains("forum-post")) continue
+                    val title = a.text().trim()
+                    if (title.length < 5 || title.contains("回复")) continue
+                    parseThread(a, a.parent()?.text() ?: "", threads, addedTids)
+                    if (threads.size >= 30) break
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -63,17 +77,49 @@ object LxfParser {
         threads
     }
 
+    private fun parseThread(a: org.jsoup.nodes.Element, text: String, threads: MutableList<Thread>, addedTids: MutableSet<String>) {
+        val href = a.attr("href")
+        val tidMatch = Regex("thread-(\\d+)-").find(href) ?: return
+        val tid = tidMatch.groupValues[1]
+        if (addedTids.contains(tid)) return
+        addedTids.add(tid)
+
+        val title = a.text().trim()
+        var views = "0"
+        var replies = "0"
+        var timeText = "刚刚"
+
+        val timeMatch = Regex("\\d{2,4}-\\d{2}-\\d{2}\\s*\\d{2}:\\d{2}").find(text)
+        if (timeMatch != null) timeText = timeMatch.value
+
+        // 暴力提取所有数字，过滤掉长数字，取前两个作为浏览和回复
+        val nums = Regex("(\\d+)").findAll(text).map { it.value }.filter { it.length < 6 }.toList()
+        if (nums.isNotEmpty()) views = nums[0]
+        if (nums.size > 1) replies = nums[1]
+
+        threads.add(
+            Thread(
+                tid = tid,
+                subject = title,
+                authorName = "理想股友",
+                viewCount = views,
+                replyCount = replies,
+                timeText = timeText
+            )
+        )
+    }
+
     suspend fun fetchThreadDetail(tid: String): ThreadPage = withContext(Dispatchers.IO) {
         try {
             val url = URL("https://www.55188.com/thread-" + tid + "-1-1.html")
             val conn = url.openConnection() as HttpURLConnection
             conn.setRequestProperty("User-Agent", UA)
-            conn.setRequestProperty("Cookie", "HMACCOUNT=F3FD580504BD7E15; Hm_lpvt_0233b908b2bf29bfd788abd7ee3556da=1757035032; 55188_passport=kn9qGAdENqKqk9ZT%2B%2FWjDVP35XMgGU142hHt6Ui3%2F9zKlODtT6%2F2%2B%2BoqX38%2FYp%2F4hg4hK7ss26VuIVFTpcvK%2BOOz%2FCvwqmKKSStJjyp%2FYnZQHjsm1NIFcGkjPvkyZkTmqZntqnYuN%2BuUJH%2B4qfsL2cST%2F2tMPu29b27w%2FXQF1ak%3D; passport2bbs=gXfzvUFx5Yx567ZhgndUtE89%2F81R6s5TCwZUBHERqfjVS%2FHg1lbEh%2FKGNJI7x1dK; cdb2_auth=jiqsgmbJXdBFKY8Asxbfh26nwQIv%2BJpbCF%2F01k%2BELaRiGSsEFr%2BxBzq%2BVeirpKA0; vOVx_56cc_saltkey=aLJSxMVL; vOVx_56cc_lastvisit=1792927840; vOVx_56cc_auth=b651Jm4PoQPCrseWTLmKlXp4zb8jVErgIwlAgbGXSi8pm42VFPmi788YjNWvibki6GzDbVKMY%2BxCC%2FC5UYkNjzlTAXo; vOVx_56cc_home_diymode=1; vOVx_56cc_atarget=1; attack_pass=pyh0VRLAJ0gLuaQMOiHLxQ%2C1793167318; vOVx_56cc_visitedfid=68D90D48D93D77D8D20D102; vOVx_56cc_sid=c9HHt7; vOVx_56cc_lip=49.118.86.233%2C1793080918; vOVx_56cc_lastact=1793104148%09forum.php%09forumdisplay; vOVx_56cc_st_t=784998%7C1793104148%7C158dfd241300e62b8417234e70a6fe54; vOVx_56cc_forum_lastvisit=D_102_1793002691D_20_1793002694D_8_1793002717D_77_1793002722D_93_1793002727D_48_1793002736D_90_1793080918D_68_1793104148; vOVx_56cc_ulastactivity=608b5Iwg34O0vA0kJ0gHcUd9ZjTiG2S6yQgcUnXnFTTQmY%2F2GD2R")
+            conn.setRequestProperty("Cookie", COOKIE)
             val html = String(conn.inputStream.readBytes(), Charset.forName("UTF-8"))
             val doc = Jsoup.parse(html)
             
             val title = doc.select("title").text().replace(" - 理想论坛", "").trim()
-            val contentHtml = doc.select("td.t_f").firstOrNull()?.html() ?: "无法解析内容或需要登录查看"
+            val contentHtml = doc.select("td.t_f").firstOrNull()?.html() ?: "无法解析内容"
             
             val fakePost = Post(
                 pid = "post_" + tid,
@@ -95,19 +141,11 @@ object LxfParser {
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            ThreadPage(
-                tid = tid,
-                subject = "加载失败",
-                forumName = "",
-                posts = emptyList(),
-                page = 1,
-                totalPages = 1,
-                formhash = "",
-                replyUrl = ""
-            )
+            ThreadPage(tid = tid, subject = "加载失败", forumName = "", posts = emptyList(), page = 1, totalPages = 1, formhash = "", replyUrl = "")
         }
     }
 
+    // 核心修改：将你本地抓取到的 9 大全站真实大类全部塞入！
     suspend fun fetchForumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
         listOf(
             ForumGroup(name = "股票软件", forums = listOf(
@@ -115,6 +153,18 @@ object LxfParser {
                 Forum(fid = "68_129", name = "通达信"),
                 Forum(fid = "68_179", name = "大智慧"),
                 Forum(fid = "68_130", name = "同花顺")
+            )),
+            ForumGroup(name = "实战交流", forums = listOf(
+                Forum(fid = "8", name = "实战交流"),
+                Forum(fid = "102", name = "选股技巧"),
+                Forum(fid = "77", name = "新手学习"),
+                Forum(fid = "20", name = "休闲娱乐")
+            )),
+            ForumGroup(name = "指标与工具", forums = listOf(
+                Forum(fid = "48", name = "指标公式"),
+                Forum(fid = "90", name = "指标问答"),
+                Forum(fid = "93", name = "金钻指标"),
+                Forum(fid = "40", name = "问题反馈")
             ))
         )
     }
