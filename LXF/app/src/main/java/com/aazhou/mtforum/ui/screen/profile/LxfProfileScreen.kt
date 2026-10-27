@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,6 +25,7 @@ fun LxfProfileScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF7F8FA))
+            .verticalScroll(androidx.compose.foundation.rememberScrollState())
     ) {
         // 头部用户信息
         Row(
@@ -110,7 +110,7 @@ fun LxfProfileScreen() {
         // 宫格菜单
         LazyVerticalGrid(
             columns = GridCells.Fixed(4),
-            modifier = Modifier.fillMaxWidth().background(Color.White).padding(16.dp),
+            modifier = Modifier.fillMaxWidth().background(Color.White).padding(16.dp).height(400.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             val menus = listOf(
