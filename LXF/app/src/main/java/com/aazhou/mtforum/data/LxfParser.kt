@@ -19,7 +19,7 @@ object LxfParser {
     suspend fun fetchThreads(view: String): List<Thread> = withContext(Dispatchers.IO) {
         val threads = mutableListOf<Thread>()
         try {
-            // 强制首页默认走 68，如果传了纯数字就走对应 fid
+            // 首页如果传 "newthread" 等无效字符，强制走 68
             var actualFid = "68"
             var typeId: String? = null
             
@@ -104,7 +104,7 @@ object LxfParser {
             val doc = Jsoup.parse(html)
             
             val title = doc.select("title").text().replace(" - 理想论坛", "").trim()
-            val contentHtml = doc.select("td.t_f").firstOrNull()?.html() ?: "无法解析内容或需要登录查看"
+            val contentHtml = doc.select("td.t_f").firstOrNull()?.html() ?: "无法解析内容"
             
             val fakePost = Post(
                 pid = "post_" + tid,

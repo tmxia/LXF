@@ -226,8 +226,6 @@ class ForumRepository(
     fun sessionCookieHeader(): String = http.cookieHeader()
 
     suspend fun forumGroups(): List<ForumGroup> = withContext(Dispatchers.IO) {
-        return@withContext com.aazhou.mtforum.data.LxfParser.fetchForumGroups()
-
         ForumParser.parseForumList(http.get(http.url("forum.php?forumlist=1&mobile=2")))
     }
 
@@ -247,17 +245,6 @@ class ForumRepository(
 
 
     suspend fun guideFeed(view: String, page: Int): ForumPage = withContext(Dispatchers.IO) {
-        val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchThreads(view)
-        if (lxfThreads.isNotEmpty()) {
-            return@withContext ForumPage(
-                forumName = "理想论坛",
-                announcements = emptyList(),
-                threads = lxfThreads,
-                page = page,
-                hasNext = true
-            )
-        }
-
         val blocked = currentBlocked()
         if (view == GUIDE_VIEW_PORTAL) {
             
@@ -312,8 +299,6 @@ class ForumRepository(
         orderType: Int = 0,
         authorId: String? = null,
     ): ThreadPage = withContext(Dispatchers.IO) {
-        return@withContext com.aazhou.mtforum.data.LxfParser.fetchThreadDetail(tid)
-
         val order = if (orderType == 1) "&ordertype=1" else ""
         val author = if (!authorId.isNullOrBlank()) "&authorid=$authorId" else ""
         val tp = ForumParser.parseThreadPage(
