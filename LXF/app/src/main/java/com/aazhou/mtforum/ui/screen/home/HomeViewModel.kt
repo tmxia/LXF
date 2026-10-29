@@ -146,11 +146,10 @@ class HomeViewModel(
     }
 
     private suspend fun reload(view: String, userInitiated: Boolean = false) {
-        // 🚨 [LXF 顶层物理斩断] 彻底阻断 MTF 原生网络请求，强行覆盖为理想论坛数据
+        // 🚨 [LXF 顶层强阻断] 抢在一切原生逻辑前，直接返回理想论坛数据
         _refreshing.value = _refreshing.value + view
         try {
             val lxfThreads = com.aazhou.mtforum.data.LxfParser.fetchThreads(view)
-            // 强覆盖，不追加，确保纯净
             val newFeeds = _feeds.value.toMutableMap()
             newFeeds[view] = FeedState(
                 state = com.aazhou.mtforum.ui.common.UiState.Success(lxfThreads),
@@ -164,10 +163,13 @@ class HomeViewModel(
         } finally {
             _refreshing.value = _refreshing.value - view
         }
-        // 强制结束，下方代码绝不执行
-        return
-    }
+        return // 绝杀！阻断下方所有 MTF 原生请求
 
+        if (view == HomeTabs.HOT) {
+            
+            runCatching { repository.home() }.onSuccess {
+                _hot.value = it
+                saveHomeToCache(it)
             }
         }
         runCatching { repository.guideFeed(view, 1) }
