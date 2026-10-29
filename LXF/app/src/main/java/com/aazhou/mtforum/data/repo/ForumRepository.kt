@@ -233,8 +233,6 @@ class ForumRepository(
 
     
     suspend fun home(): HomeData = withContext(Dispatchers.IO) {
-        return@withContext com.aazhou.mtforum.data.LxfParser.fetchHomeData()
-
         val data = ForumParser.parseHome(http.get(http.url("forum.php?mod=guide&view=hot&mobile=2")))
         val blocked = currentBlocked()
         if (blocked.isEmpty()) data

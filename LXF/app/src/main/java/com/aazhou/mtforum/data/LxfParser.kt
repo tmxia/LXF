@@ -5,7 +5,6 @@ import com.aazhou.mtforum.data.model.ThreadPage
 import com.aazhou.mtforum.data.model.Post
 import com.aazhou.mtforum.data.model.ForumGroup
 import com.aazhou.mtforum.data.model.Forum
-import com.aazhou.mtforum.data.model.HomeData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
@@ -17,29 +16,10 @@ object LxfParser {
     private const val UA = "Mozilla/5.0 (Linux; Android 12)"
     private const val COOKIE = "HMACCOUNT=F3FD580504BD7E15; 55188_passport=kn9qGAdENqKqk9ZT%2B%2FWjDVP35XMgGU142hHt6Ui3%2F9zKlODtT6%2F2%2B%2BoqX38%2FYp%2F4hg4hK7ss26VuIVFTpcvK%2BOOz%2FCvwqmKKSStJjyp%2FYnZQHjsm1NIFcGkjPvkyZkTmqZntqnYuN%2BuUJH%2B4qfsL2cST%2F2tMPu29b27w%2FXQF1ak%3D; passport2bbs=gXfzvUFx5Yx567ZhgndUtE89%2F81R6s5TCwZUBHERqfjVS%2FHg1lbEh%2FKGNJI7x1dK; vOVx_56cc_auth=b651Jm4PoQPCrseWTLmKlXp4zb8jVErgIwlAgbGXSi8pm42VFPmi788YjNWvibki6GzDbVKMY%2BxCC%2FC5UYkNjzlTAXo"
 
-    suspend fun fetchHomeData(): HomeData = withContext(Dispatchers.IO) {
-        // 为了防止字段不匹配导致崩溃，我们先返回一个只包含基础 Tab 的 HomeData，或者如果实在搞不定，就直接抛给原来的逻辑。
-        // 这里通过反射或者最安全的方式进行构造。
-        try {
-            HomeData(
-                tabs = listOf(
-                    Forum(view = "68", title = "全部"),
-                    Forum(view = "68_88", title = "大智慧"),
-                    Forum(view = "68_84", title = "通达信"),
-                    Forum(view = "68_86", title = "同花顺")
-                ),
-                hotThreads = emptyList(),
-                stats = emptyMap()
-            )
-        } catch (e: Exception) {
-            // 如果参数名不对（比如不叫 view 或 title），这里会捕获异常，防止 App 崩溃
-            throw RuntimeException("HomeData 结构不匹配: ${e.message}")
-        }
-    }
-
     suspend fun fetchThreads(view: String): List<Thread> = withContext(Dispatchers.IO) {
         val threads = mutableListOf<Thread>()
         try {
+            // 强制首页默认走 68，如果传了纯数字就走对应 fid
             var actualFid = "68"
             var typeId: String? = null
             
